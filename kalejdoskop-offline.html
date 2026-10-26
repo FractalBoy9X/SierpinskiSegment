@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1019">
+  <title>Kalejdoskop offline — n=1–60</title>
+  <link rel="icon" href="data:,">
+  <style>
+:root{color-scheme:dark;--background:#0b1019;--panel:#111722;--line:#252c3a;--text:#e7ecf3;--muted:#93a0b3;--accent:#8cebd5;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px}
+*{box-sizing:border-box}body{margin:0;background:var(--background);color:var(--text)}button,input,select{font:inherit}button,select{cursor:pointer}button{color:inherit}button:focus-visible,input:focus-visible,select:focus-visible,canvas:focus-visible{outline:2px solid var(--accent);outline-offset:4px}button:disabled{opacity:.4;cursor:default}[hidden]{display:none!important}
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 28px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:14px;letter-spacing:.15em;font-size:15px;font-weight:600;text-decoration:none;color:var(--text);white-space:nowrap}.brand-light{color:var(--muted);font-weight:400}.brand-mark{width:22px;height:22px;border:1px solid var(--accent);position:relative;transform:rotate(45deg)}.brand-mark:after{content:"";position:absolute;inset:5px;border:1px solid var(--accent)}.topbar-caption{color:var(--muted);letter-spacing:.025em}.topbar-actions{display:flex;align-items:center;gap:24px}.engine{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}.engine i{width:6px;height:6px;border-radius:50%;background:var(--accent)}.quiet-button{background:none;border:1px solid var(--line);border-radius:7px;padding:9px 12px;font-size:12px}.quiet-button:hover{border-color:var(--muted)}
+.workspace{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:calc(100dvh - 72px)}.sidebar{background:var(--panel);padding:28px 22px;border-right:1px solid var(--line);height:calc(100dvh - 72px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line) var(--panel)}.section-heading,.parameter-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}h1,h2,p{margin:0}h1,.parameter-heading h2{font-size:14px;font-weight:500}.section-heading>span{font-size:11px;color:var(--muted);letter-spacing:.08em}.variant-list{display:grid;gap:5px;margin:18px 0 28px}.variant-button{display:flex;align-items:center;gap:13px;text-align:left;width:100%;border:1px solid transparent;background:none;padding:10px 11px;border-radius:7px}.variant-number{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}.variant-label{display:flex;flex-direction:column;gap:3px;min-width:0}.variant-name{font-size:13px}.variant-family{font-size:11px;color:var(--muted)}.variant-button:hover{background:#1a2230}.variant-button[aria-pressed=true]{background:#1c2b30;border-color:#39544f}.variant-button[aria-pressed=true] .variant-number{color:var(--accent)}.parameter-heading{padding-top:22px;border-top:1px solid var(--line);margin-bottom:22px}.text-button{border:0;background:none;color:var(--muted);padding:5px 0;font-size:12px}.text-button:hover{color:var(--accent)}.parameter{margin:0 0 20px}.parameter label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:11px;color:#bec8d6}.parameter output{color:var(--text);font-variant-numeric:tabular-nums}.parameter input[type=range]{display:block;width:100%;accent-color:var(--accent);height:18px;margin:0;cursor:pointer}.range-endpoints{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:var(--muted);margin-top:7px}.palette-control select{width:100%;background:#151d2a;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:10px}.check{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;cursor:pointer;line-height:1.5}.check input{accent-color:var(--accent);width:15px;height:15px;margin:0}.construction-note{border-top:1px solid var(--line);margin-top:26px;padding-top:21px}.eyebrow{font-size:10px;letter-spacing:.16em;color:var(--muted);font-weight:500}.construction-note p{font-size:12px;line-height:1.7;color:var(--muted);margin-top:10px}
+.viewport{position:relative;min-width:0;height:calc(100dvh - 72px);min-height:540px;background:#0b1019;overflow:hidden}.viewport-heading{position:absolute;top:28px;left:30px;right:30px;display:flex;align-items:center;justify-content:space-between;gap:20px;pointer-events:none;z-index:1}.viewport-heading h2{font-size:22px;font-weight:400;letter-spacing:-.02em;margin-top:9px}.dimension{font-size:11px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);padding:7px;border-radius:5px}#fractal-canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab;outline-offset:-3px}#fractal-canvas.dragging{cursor:grabbing}.view-controls{position:absolute;bottom:68px;left:50%;transform:translateX(-50%);display:flex;align-items:center;background:#171f2eee;border:1px solid #30394b;border-radius:9px;padding:4px;box-shadow:0 4px 24px #0003}.view-controls button{display:flex;align-items:center;justify-content:center;height:34px;min-width:34px;border:0;background:none;border-radius:5px;font-size:21px}.view-controls button:hover{background:#283448}.view-controls output{width:58px;text-align:center;font-size:12px;font-variant-numeric:tabular-nums;color:#c5cfdb}.control-divider{width:1px;height:18px;background:var(--line);margin:0 7px}.view-controls .fit-button{font-size:12px;padding:0 11px}.viewport-bottom{position:absolute;bottom:24px;left:30px;right:30px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--muted);font-size:11px;pointer-events:none}.viewport-bottom #geometry-info{white-space:nowrap;font-variant-numeric:tabular-nums}.busy{position:absolute;top:112px;left:30px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--accent);padding:9px 12px;background:#171f2ef0;border-radius:6px;pointer-events:none}.busy>span{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 1s ease-in-out infinite}.canvas-error{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(80%,460px);padding:24px;background:var(--panel);border:1px solid #764853;border-radius:9px;color:#fac2cd;line-height:1.6}@keyframes pulse{50%{opacity:.3}}@media(prefers-reduced-motion:reduce){.busy>span{animation:none}}
+@media(min-width:1500px){.workspace{grid-template-columns:330px minmax(0,1fr)}.sidebar{padding:32px 28px}}
+@media(max-width:900px){.workspace{grid-template-columns:260px minmax(0,1fr)}.sidebar{padding:24px 16px}.topbar{padding:0 20px}.topbar-caption{display:none}.viewport-heading{left:20px;right:20px}.viewport-heading h2{font-size:20px}.viewport-bottom{left:20px;right:20px;align-items:flex-start;flex-direction:column;gap:8px}.busy{left:20px}.range-endpoints{font-size:10px}}
+@media(max-width:640px){.topbar{height:60px;padding:0 16px;gap:12px}.brand{font-size:12px;gap:11px;letter-spacing:.1em}.brand-mark{width:17px;height:17px}.brand-mark:after{inset:4px}.topbar-actions{gap:12px}.engine{font-size:10px}.quiet-button{font-size:11px;padding:8px}.workspace{display:flex;flex-direction:column}.viewport{order:0;height:65dvh;min-height:440px}.sidebar{order:1;border-right:0;border-top:1px solid var(--line);padding:24px 20px}.variant-list{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:22px}.variant-button{padding:10px 7px;gap:9px}.variant-name{font-size:12px}.variant-family{font-size:10px}.viewport-heading{top:22px}.viewport-heading h2{font-size:19px}.viewport-bottom{font-size:10px;bottom:16px}.view-controls{bottom:64px}.parameter input[type=range]{height:28px}.parameter label,.check{font-size:13px}.palette-control select{font-size:16px}.text-button{padding:10px 0}.section-heading>span{font-size:12px}}
+@media(pointer:coarse){.view-controls button{height:44px;min-width:44px}.quiet-button{min-height:44px}.variant-button{min-height:52px}.check{min-height:44px}.view-controls .fit-button{min-width:76px}}
+@media(max-width:640px){.sidebar{height:auto;overflow-y:visible}}
+@media(max-width:420px){.engine{display:none}}
+.page-link{text-decoration:none}.page-link:hover{color:var(--accent)}.explorer-link{display:block;margin-top:22px;padding:12px 0;color:var(--accent);text-decoration:none;font-size:12px}.explorer-link:hover{text-decoration:underline}.polygon-selector{margin-top:24px}.polygon-selector label{align-items:center}.polygon-selector input[type=number]{width:64px;padding:7px 6px;background:#151d2a;border:1px solid var(--line);border-radius:5px;color:var(--text);font-variant-numeric:tabular-nums;font-size:16px}.polygon-presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:16px}.polygon-presets button{border:1px solid var(--line);background:#151d2a;border-radius:5px;height:36px;font-size:12px}.polygon-presets button:hover{border-color:var(--muted)}.polygon-presets button[aria-pressed=true]{color:var(--accent);background:#1c2b30;border-color:#39544f}.shape-note{font-size:11px;line-height:1.6;color:var(--muted);margin-top:12px}#outline:disabled{opacity:.35}#outline:disabled+span{opacity:.55}@media(pointer:coarse){.polygon-presets button{height:44px}}
+
+
+.symmetry-settings{border:1px solid var(--line);border-radius:8px;margin:20px 0 0;padding:14px 12px 12px;min-width:0}
+.symmetry-settings legend{padding:0 5px;font-size:12px;color:#ffda75}
+.guide-setting{margin:0 0 12px;padding:0;border:0;min-width:0}
+.guide-setting legend{padding:0;font-size:12px;color:var(--muted)}
+.guide-setting.rotation-setting legend{color:#76e8ff}
+.guide-setting .shape-note{margin:0;font-size:11px}
+.symmetry-visibility{display:flex;gap:8px;margin-bottom:10px}
+.symmetry-visibility label{display:flex;justify-content:flex-start;gap:8px;flex:1;margin:0;min-height:44px;cursor:pointer}
+.symmetry-visibility input{width:18px;height:18px;accent-color:#ffda75;margin:0}
+.rotation-setting input{accent-color:#76e8ff}
+.symmetry-stepper{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.symmetry-stepper button{width:48px;height:44px;border:1px solid #55503c;background:#24251f;border-radius:6px;font-size:24px;touch-action:manipulation}
+.symmetry-stepper button:hover:enabled{border-color:#ffda75;background:#343328}
+.symmetry-stepper output{font-size:20px;color:#ffda75;font-variant-numeric:tabular-nums}
+#axes-note{margin-top:10px}
+#symmetry-axes,#global-axes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+#symmetry-axes line{vector-effect:non-scaling-stroke;stroke-linecap:round}
+#symmetry-axes .axis-halo{stroke:#0b1019;stroke-width:5;stroke-opacity:.85}
+#symmetry-axes .axis-line{stroke:#ffda75;stroke-width:1.8;stroke-opacity:.95}
+.pattern-help{font-size:11px;line-height:1.5;color:var(--muted);margin-top:8px}
+
+</style>
+</head>
+<body data-mode="kaleidoscope">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>KALEJDOSKOP</span></div>
+    <span class="topbar-caption">n = 1–60 · offline</span>
+    <div class="topbar-actions"><span class="engine"><i aria-hidden="true"></i><span id="engine-label">WebGL</span></span><button id="fullscreen" class="quiet-button" type="button">Pełny ekran</button></div>
+  </header>
+  <main class="workspace">
+    <aside class="sidebar" aria-label="Wielokąt i parametry kalejdoskopu">
+      <div class="section-heading"><h1>Wielokąt i symetria</h1><span>n = 1—60</span></div>
+      <div id="variants" hidden></div>
+      <div class="polygon-selector parameter" id="sectors-group">
+        <label for="sectors">Liczba boków / sektorów <input id="sectors-number" type="number" min="1" max="60" step="1" value="12" aria-label="Dokładna liczba boków lub motywów, od 1 do 60"></label>
+        <input id="sectors" type="range" min="1" max="60" step="1" value="12">
+        <div class="range-endpoints"><span>1</span><span>60</span></div>
+        <div id="polygon-presets" class="polygon-presets" role="group" aria-label="Wybierz liczbę boków">
+          <button type="button" data-n="1">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-n="4">4</button><button type="button" data-n="5">5</button><button type="button" data-n="6">6</button><button type="button" data-n="8">8</button><button type="button" data-n="12">12</button><button type="button" data-n="24">24</button><button type="button" data-n="60">60</button>
+        </div>
+        <p id="shape-note" class="shape-note" aria-live="polite"></p>
+        <fieldset class="symmetry-settings">
+          <legend>Symetrie Dₙ</legend>
+          <fieldset class="guide-setting rotation-setting">
+            <legend>Osie całego wzoru</legend>
+            <div class="symmetry-visibility">
+              <label for="global-show"><input id="global-show" type="radio" name="pattern-visibility" value="show" checked><span>Pokaż</span></label>
+              <label for="global-hide"><input id="global-hide" type="radio" name="pattern-visibility" value="hide"><span>Ukryj</span></label>
+            </div>
+            <p id="global-note" class="shape-note" aria-live="polite"></p>
+            <p class="pattern-help">Osie geometrii całego kalejdoskopu. Obrót kopii zachowuje symetrię Dₙ. Kolor jest pomijany przy szukaniu dodatkowych osi.</p>
+          </fieldset>
+          <fieldset class="guide-setting">
+          <legend>Osie konstrukcji Dₙ · 180°/n</legend>
+          <div class="symmetry-visibility">
+            <label for="axes-show"><input id="axes-show" type="radio" name="symmetry-visibility" value="show"><span>Pokaż</span></label>
+            <label for="axes-hide"><input id="axes-hide" type="radio" name="symmetry-visibility" value="hide" checked><span>Ukryj</span></label>
+          </div>
+          <p id="axes-note" class="shape-note"></p>
+          </fieldset>
+          <div class="symmetry-stepper" role="group" aria-label="Zmień symetrię Dₙ, od n = 1 do 60">
+            <button id="symmetry-less" type="button" aria-label="Zmniejsz n o 1">−</button>
+            <output id="symmetry-order" aria-live="polite" aria-label="Aktualna symetria">D₁₂</output>
+            <button id="symmetry-more" type="button" aria-label="Zwiększ n o 1">+</button>
+          </div>
+        </fieldset>
+      </div>
+      <div class="parameter-heading"><h2>Motyw wewnętrzny</h2><button id="defaults" class="text-button" type="button">Domyślne</button></div>
+      <div class="parameter">
+        <label for="depth">Iteracje <output id="depth-value" for="depth">6</output></label>
+        <input id="depth" type="range" min="1" max="7" step="1" value="6">
+        <div class="range-endpoints"><span>Prosta struktura</span><span>Więcej szczegółów</span></div>
+        <p id="depth-hint" class="shape-note"></p>
+      </div>
+      <div class="parameter">
+        <label for="twist">Obrót kopii motywu <output id="twist-value" for="twist">0°</output></label>
+        <input id="twist" type="range" min="-60" max="60" step="1" value="0">
+      </div>
+      <div class="parameter">
+        <label for="scale">Skala kopii <output id="scale-value" for="scale">100%</output></label>
+        <input id="scale" type="range" min="80" max="115" step="1" value="100">
+      </div>
+      <div class="parameter" id="warp-group" hidden><label for="warp">Wygięcie <output id="warp-value">6%</output></label><input id="warp" type="range" min="0" max="18" value="6"></div>
+      <div class="parameter palette-control"><label for="palette">Kolory</label><select id="palette"><option value="mineral">Nefryt / bursztyn</option><option value="neon">Neon</option><option value="warm">Miedź / koral</option><option value="mono">Monochrom</option></select></div>
+      <label class="check"><input id="contours" type="checkbox" checked><span>Kontury wcześniejszych iteracji</span></label>
+      <label class="check"><input id="outline" type="checkbox" checked><span>Obrys wielokąta</span></label>
+      <div class="construction-note"><span class="eyebrow">REGUŁA KONSTRUKCJI</span><p id="rule"></p></div>
+    </aside>
+    <section class="viewport" aria-labelledby="fractal-title">
+      <div class="viewport-heading"><div><span id="family" class="eyebrow">WIELOKĄT FOREMNY</span><h2 id="fractal-title">Kalejdoskop · n = 12</h2></div><span id="symmetry-badge" class="dimension">D₁₂</span></div>
+      <canvas id="fractal-canvas" tabindex="0" role="img" aria-label="Interaktywny kalejdoskop" aria-describedby="navigation-help"></canvas>
+      <svg id="symmetry-axes" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" hidden><g class="guide-lines"></g></svg>
+      <canvas id="global-axes" aria-hidden="true" hidden></canvas>
+      <div class="canvas-error" id="canvas-error" role="alert" hidden></div>
+      <div id="busy" class="busy" role="status" aria-live="polite" hidden><span></span>Obliczam konstrukcję…</div>
+      <div class="view-controls" role="group" aria-label="Widok kalejdoskopu">
+        <button type="button" id="zoom-out" aria-label="Oddal">−</button><output id="zoom-value" aria-label="Powiększenie">1×</output><button type="button" id="zoom-in" aria-label="Przybliż">+</button><span class="control-divider"></span><button type="button" id="fit" class="fit-button">Dopasuj</button>
+      </div>
+      <div class="viewport-bottom"><span id="navigation-help">Przeciągnij, aby przesunąć · kółko lub szczypnięcie, aby przybliżyć</span><span id="geometry-info" aria-live="polite">Przygotowuję geometrię</span></div>
+    </section>
+  </main>
+<script id="offline-worker-source" type="application/json">"// Reflection axes of actual convex polygons after all transforms and clipping.\nconst PatternSymmetry=(()=>{\n  function cleanPolygon(points) {\n    if(points.length\u003c3)return [];\n    const span=Math.max(...points.map(p=>p[0]))-Math.min(...points.map(p=>p[0]))+\n      Math.max(...points.map(p=>p[1]))-Math.min(...points.map(p=>p[1]));\n    const tolerance=Math.max(span*1e-8,1e-10),result=[];\n    for(const p of points)if(!result.length||Math.hypot(p[0]-result.at(-1)[0],p[1]-result.at(-1)[1])>tolerance)result.push(p);\n    if(result.length>1&&Math.hypot(result[0][0]-result.at(-1)[0],result[0][1]-result.at(-1)[1])\u003c=tolerance)result.pop();\n    let changed=true;\n    while(changed&&result.length>=3) {\n      changed=false;\n      for(let i=0;i\u003cresult.length;i++) {\n        const a=result[(i+result.length-1)%result.length],b=result[i],c=result[(i+1)%result.length];\n        const length=Math.hypot(c[0]-a[0],c[1]-a[1]);\n        if(length\u003c=tolerance||Math.abs((b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]))\u003c=tolerance*length) {\n          result.splice(i,1);changed=true;break;\n        }\n      }\n    }\n    return result.length>=3?result:[];\n  }\n  function axesForPolygon(input) {\n    const points=cleanPolygon(input),n=points.length;\n    if(n\u003c3)return [];\n    const cx=points.reduce((s,p)=>s+p[0],0)/n,cy=points.reduce((s,p)=>s+p[1],0)/n;\n    const radius=Math.max(...points.map(p=>Math.hypot(p[0]-cx,p[1]-cy)));\n    const tolerance=Math.max(radius*1e-7,1e-9),axes=[];\n    // A reflection reverses the cyclic vertex order. Test every possible\n    // reversing permutation; this also covers axes through edge midpoints.\n    for(let shift=0;shift\u003cn;shift++) {\n      let ux=0,uy=0,length=0;\n      for(let i=0;i\u003cn&&length\u003c=tolerance;i++) {\n        const p=points[i],q=points[(shift-i+n)%n];\n        ux=-(p[1]-q[1]);uy=p[0]-q[0];length=Math.hypot(ux,uy);\n      }\n      if(length\u003c=tolerance)continue;\n      ux/=length;uy/=length;\n      let matches=true,min=Infinity,max=-Infinity;\n      for(let i=0;i\u003cn;i++) {\n        const p=points[i],q=points[(shift-i+n)%n],x=p[0]-cx,y=p[1]-cy,t=x*ux+y*uy;\n        if(Math.hypot(cx+2*t*ux-x-q[0],cy+2*t*uy-y-q[1])>tolerance){matches=false;break;}\n        min=Math.min(min,t);max=Math.max(max,t);\n      }\n      if(matches) {\n        const margin=(max-min)*.12;\n        axes.push([cx+(min-margin)*ux,cy+(min-margin)*uy,cx+(max+margin)*ux,cy+(max+margin)*uy]);\n      }\n    }\n    return axes;\n  }\n  function convexHull(points) {\n    if(points.length\u003c3)return [];\n    const sorted=points.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);\n    let ymin=Infinity,ymax=-Infinity;for(const p of sorted){ymin=Math.min(ymin,p[1]);ymax=Math.max(ymax,p[1]);}\n    const span=Math.hypot(sorted.at(-1)[0]-sorted[0][0],ymax-ymin);\n    const epsilon=Math.max(span*1e-10,1e-12),unique=[];\n    for(const p of sorted)if(!unique.length||Math.hypot(p[0]-unique.at(-1)[0],p[1]-unique.at(-1)[1])>epsilon)unique.push(p);\n    const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);\n    const lower=[],upper=[];\n    for(const p of unique){while(lower.length>1&&cross(lower.at(-2),lower.at(-1),p)\u003c=epsilon*span)lower.pop();lower.push(p);}\n    for(let k=unique.length-1;k>=0;k--){const p=unique[k];while(upper.length>1&&cross(upper.at(-2),upper.at(-1),p)\u003c=epsilon*span)upper.pop();upper.push(p);}\n    return lower.slice(0,-1).concat(upper.slice(0,-1));\n  }\n  function pattern(shapes,includeContours=true) {\n    const records=[];\n    for(const shape of shapes) {\n      if(shape.stroke&&!includeContours)continue;\n      const points=cleanPolygon(shape.points);if(points.length\u003c3)continue;\n      const center=points.reduce((a,p)=>[a[0]+p[0]/points.length,a[1]+p[1]/points.length],[0,0]);\n      records.push({points,center,tag:(shape.stroke?'stroke:'+shape.stroke:'fill')+':'+shape.alpha});\n    }\n    const hull=convexHull(records.flatMap(r=>r.points));\n    if(hull.length\u003c3)return {records,hull,candidates:[]};\n    return {records,hull,candidates:axesForPolygon(hull)};\n  }\n  function verifier(records,hull) {\n    const center=hull.reduce((a,p)=>[a[0]+p[0]/hull.length,a[1]+p[1]/hull.length],[0,0]);\n    const radius=Math.max(...hull.map(p=>Math.hypot(p[0]-center[0],p[1]-center[1])));\n    const epsilon=Math.max(radius*1e-7,1e-9),cell=4*epsilon,buckets=new Map();\n    const key=(x,y)=>x+','+y;\n    records.forEach((r,i)=>{const k=key(Math.floor(r.center[0]/cell),Math.floor(r.center[1]/cell));if(!buckets.has(k))buckets.set(k,[]);buckets.get(k).push(i);});\n    return axis=>{\n      const [cx,cy,ex,ey]=axis,length=Math.hypot(ex-cx,ey-cy),ux=(ex-cx)/length,uy=(ey-cy)/length,used=new Uint8Array(records.length);\n      const reflect=p=>{const x=p[0]-cx,y=p[1]-cy,t=x*ux+y*uy;return [cx+2*t*ux-x,cy+2*t*uy-y];};\n      for(const record of records) {\n        const c=reflect(record.center),bx=Math.floor(c[0]/cell),by=Math.floor(c[1]/cell),points=record.points.map(reflect);\n        let match=-1;\n        for(let dx=-1;dx\u003c=1&&match\u003c0;dx++)for(let dy=-1;dy\u003c=1&&match\u003c0;dy++) {\n          for(const i of buckets.get(key(bx+dx,by+dy))||[]) {\n            const target=records[i];\n            if(used[i]||target.tag!==record.tag||target.points.length!==points.length)continue;\n            if(Math.hypot(target.center[0]-c[0],target.center[1]-c[1])>epsilon)continue;\n            if(points.every(p=>target.points.some(q=>Math.hypot(p[0]-q[0],p[1]-q[1])\u003c=epsilon))){match=i;break;}\n          }\n        }\n        if(match\u003c0)return false;used[match]=1;\n      }\n      return true;\n    };\n  }\n  function axesForPattern(shapes,includeContours=true) {\n    const p=pattern(shapes,includeContours);\n    if(!p.candidates.length)return [];\n    return p.candidates.filter(verifier(p.records,p.hull));\n  }\n  function globalAxes(fractal,includeOutline=true,includeContours=true) {\n    // D_n is guaranteed by the mirrored-sector construction for every twist.\n    const axes=[],[cx,cy]=fractal.origin,r=fractal.radius*1.12,n=fractal.sectors;\n    for(let k=0;k\u003cn;k++){const a=k*Math.PI/n,dx=Math.sin(a)*r,dy=Math.cos(a)*r;axes.push([cx-dx,cy-dy,cx+dx,cy+dy]);}\n    // A visible regular n-gon has precisely these axes, so no other axis of\n    // the whole picture can exist. Without it, inspect the actual pattern.\n    if(!includeOutline||n\u003c3) {\n      const p=pattern(fractal.shapes,includeContours);\n      const extra=p.candidates.filter(a=>!axes.some(b=>{\n        const ux=a[2]-a[0],uy=a[3]-a[1],vx=b[2]-b[0],vy=b[3]-b[1],la=Math.hypot(ux,uy),lb=Math.hypot(vx,vy);\n        return Math.abs(ux*vy-uy*vx)\u003c=1e-7*la*lb&&Math.abs((a[0]-b[0])*vy-(a[1]-b[1])*vx)\u003c=1e-7*lb*fractal.radius;\n      }));\n      if(extra.length)axes.push(...extra.filter(verifier(p.records,p.hull)));\n    }\n    return new Float32Array(axes.flat());\n  }\n  return {axesForPolygon,axesForPattern,globalAxes};\n})();\nif(typeof module!=='undefined'&&module.exports)module.exports=PatternSymmetry;\n\n/* Deterministic, finite recursive approximations. No dependencies. */\n(function (scope) {\n  'use strict';\n  const PI = Math.PI;\n  const square = [[-.5,-.5],[.5,-.5],[.5,.5],[-.5,.5]];\n  const triangleRadius=1/Math.sqrt(3);\n  const triangle = [[0,-triangleRadius],[.5,triangleRadius/2],[-.5,triangleRadius/2]];\n  const variants = [\n    {id:'01-cantor-wir', title:'Cantor · wirujące narożniki', rule:'Cztery kopie, skala 0,34, obroty ±17°.', depth:4},\n    {id:'02-szachownica-fazowa', title:'Szachownica · zmiana fazy', rule:'Maski 5 i 4 pól na przemian; sinusoidalne wygięcie.', depth:5},\n    {id:'03-cantor-rombowy', title:'Cantor · romb w kwadracie', rule:'Cztery narożniki i piąta kopia obrócona o 45°.', depth:4},\n    {id:'04-sierpinski-spiralny', title:'Sierpiński · trójkątny wir', rule:'Trzy kopie, skale 0,49 / 0,45 / 0,47 i obrót 15°.', depth:6},\n    {id:'05-sierpinski-kalejdoskop', title:'Sierpiński · kalejdoskop', rule:'Sześć trójkątów, naprzemienne odbicia w rekurencji.', depth:6},\n    {id:'06-cantor-sierpinski', title:'Cantor × Sierpiński', rule:'Podziały trójkątne i cztery narożniki na przemian.', depth:5}\n  ];\n  function mul(a,b) {\n    return [a[0]*b[0]+a[2]*b[1], a[1]*b[0]+a[3]*b[1],\n      a[0]*b[2]+a[2]*b[3], a[1]*b[2]+a[3]*b[3],\n      a[0]*b[4]+a[2]*b[5]+a[4], a[1]*b[4]+a[3]*b[5]+a[5]];\n  }\n  function transform(scale,angle,x,y,reflect=false) {\n    const c=Math.cos(angle)*scale, s=Math.sin(angle)*scale, f=reflect?-1:1;\n    return [c*f,s*f,-s,c,x,y];\n  }\n  function point(m,p) {return [m[0]*p[0]+m[2]*p[1]+m[4],m[1]*p[0]+m[3]*p[1]+m[5]];}\n  function generate(index,depth=variants[index].depth,options={}) {\n    const strict=index===4&&options.strictSymmetry===true;\n    const sectors=index===4?(options.sectors ?? 6):null;\n    if(index===4&&(!Number.isInteger(sectors)||(strict?(sectors\u003c1||sectors>60):(sectors!==6&&sectors!==12)))) {\n      throw new RangeError(strict?'Liczba sektorów musi być całkowita, od 1 do 60.':'Kalejdoskop obsługuje 6 lub 12 sektorów.');\n    }\n    const scaleMultiplier=options.scaleMultiplier ?? 1;\n    const twist=(options.twist ?? [17,0,45,15,0,7.5][index])*PI/180;\n    const warp=options.warp ?? .060;\n    const shapes=[];\n    let clipBoundary=null,boundary=[],outerRadius=1;\n    const id=[1,0,0,1,0,0];\n    function clip(points,polygon) {\n      // Sutherland–Hodgman clipping against a counterclockwise convex wedge.\n      for(let k=0;k\u003cpolygon.length&&points.length;k++) {\n        const a=polygon[k],b=polygon[(k+1)%polygon.length];\n        const side=p=>(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);\n        const output=[];let previous=points[points.length-1],pd=side(previous);\n        for(const current of points) {\n          const cd=side(current),pi=pd>=-1e-12,ci=cd>=-1e-12;\n          if(pi!==ci) {\n            const t=pd/(pd-cd);\n            output.push([previous[0]+t*(current[0]-previous[0]),previous[1]+t*(current[1]-previous[1])]);\n          }\n          if(ci)output.push(current);\n          previous=current;pd=cd;\n        }\n        points=output;\n      }\n      return points;\n    }\n    function add(m,vertices,color,alpha=1,stroke=0) {\n      let points=vertices.map(p=>point(m,p));\n      if(strict&&clipBoundary) {\n        points=clip(points,clipBoundary);\n        if(points.length\u003c3)return;\n      }\n      if(index===1) points=points.map(([x,y])=>[x+warp*Math.sin(2*PI*y), y+warp*Math.sin(2*PI*x)]);\n      shapes.push({points,color,alpha,stroke});\n    }\n    function recur(m,level,color=0,sector=0) {\n      const left=depth-level;\n      const tri=index===3||index===4||(index===5&&level%2===0);\n      if(left===0) {add(m,tri?triangle:square,color);return;}\n      // Delicate earlier-generation contours reveal the recursive geometry.\n      if(level>0&&level\u003c=3&&index!==1&&index!==5) {\n        add(m,tri?triangle:square,color,.22,.0006);\n      }\n      if(index===0||index===2) {\n        const r=(index===0?.34:.31)*scaleMultiplier;\n        const gap=(1-r)/2;\n        const centers=[[-gap,-gap],[gap,-gap],[gap,gap],[-gap,gap]];\n        centers.forEach(([x,y],k)=>{\n          const angle=index===0?(k%2?1:-1)*twist:0;\n          recur(mul(m,transform(r,angle,x,y)),level+1,level===0?k:color,sector);\n        });\n        if(index===2) recur(mul(m,transform(.235*scaleMultiplier,twist,0,0)),level+1,4,sector);\n      } else if(index===1) {\n        for(let y=0;y\u003c3;y++) for(let x=0;x\u003c3;x++) {\n          if((x+y)%2===level%2) {\n            const col=level===0?(x+2*y)%5:color;\n            recur(mul(m,transform(scaleMultiplier/3,(x+y)%2?-twist:twist,(x-1)/3,(y-1)/3)),level+1,col,sector);\n          }\n        }\n      } else if(index===3||index===4||(index===5&&level%2===0)) {\n        triangle.forEach(([x,y],k)=>{\n          const r=(index===3?[.49,.45,.47][k]:index===4?.49:.48)*scaleMultiplier;\n          const angle=index===3||index===4?twist:0;\n          const mirror=index===4&&(k+level+sector)%2===1;\n          const col=level===0&&index!==4?k:color;\n          recur(mul(m,transform(r,angle,(1-r)*x,(1-r)*y,mirror)),level+1,col,sector);\n        });\n      } else {\n        const r=.32*scaleMultiplier, gap=(1-r)/2;\n        [[-gap,-gap],[gap,-gap],[gap,gap],[-gap,gap]].forEach(([x,y],k)=>{\n          recur(mul(m,transform(r,(k%2?1:-1)*twist,x,y)),level+1,color,sector);\n        });\n      }\n    }\n    if(index===4) {\n      // For n>=3, the wedge angle is 360/n. Values 1 and 2 use one or\n      // two finite motifs: a regular one- or two-sided polygon is degenerate.\n      const squeeze=sectors>=3?Math.tan(PI/sectors)/Math.tan(PI/6):1;\n      outerRadius=Math.hypot(.5*squeeze,1.5*triangleRadius);\n      const needsReflection=Math.abs(Math.sin(3*twist))>1e-10;\n      for(let k=0;k\u003csectors;k++) {\n        const angle=k*2*PI/sectors;\n        const outer=transform(1,angle,-Math.sin(angle)*triangleRadius,Math.cos(angle)*triangleRadius);\n        const root=mul(outer,[squeeze,0,0,1,0,0]);\n        if(strict) {\n          clipBoundary=triangle.map(p=>point(root,p));\n          if(sectors>=3)boundary.push(clipBoundary[2]);\n        }\n        recur(root,0,k%5,strict?0:k);\n        if(strict&&needsReflection)recur(mul(root,[-1,0,0,1,0,0]),0,k%5,0);\n      }\n    } else recur(id,0);\n    let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;\n    for(const shape of shapes) for(const [x,y] of shape.points) {\n      minX=Math.min(minX,x);maxX=Math.max(maxX,x);\n      minY=Math.min(minY,y);maxY=Math.max(maxY,y);\n    }\n    for(const [x,y] of boundary) {\n      minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);\n    }\n    const centered=strict&&sectors>=2;\n    const span=centered?2*Math.max(Math.abs(minX),Math.abs(maxX),Math.abs(minY),Math.abs(maxY)):Math.max(maxX-minX,maxY-minY);\n    const factor=900/span;\n    const cx=centered?0:(minX+maxX)/2,cy=centered?0:(minY+maxY)/2;\n    const normalize=([x,y])=>[500+(x-cx)*factor,500+(y-cy)*factor];\n    shapes.forEach(s=>{\n      s.points=s.points.map(normalize);\n      s.stroke*=factor;\n    });\n    return {...variants[index],depth,sectors,strictSymmetry:strict,shapes,boundary:boundary.map(normalize),origin:normalize([0,0]),radius:outerRadius*factor};\n  }\n  function kaleidoscopeDepthLimit(sectors) {\n    if(!Number.isInteger(sectors)||sectors\u003c1||sectors>60)throw new RangeError('Liczba sektorów musi być całkowita, od 1 do 60.');\n    let depth=1;\n    // Reserve both the motif and its mirror, even at angles where they\n    // coincide. This keeps the limit stable while the angle is adjusted.\n    while(depth\u003c10&&2*sectors*3**(depth+1)\u003c=160000)depth++;\n    return depth;\n  }\n  const api={variants,generate,kaleidoscopeDepthLimit};\n  if(typeof module!=='undefined'&&module.exports) module.exports=api;\n  else scope.FractalSet=api;\n})(typeof window!=='undefined'?window:globalThis);\n\n'use strict';\n\nself.onmessage=function(event) {\n  const {id,index,depth,options}=event.data;\n  const start=performance.now();\n  try {\n    const fractal=FractalSet.generate(index,depth,options);\n    const globalAxes=PatternSymmetry.globalAxes(fractal,options.analyzeOutline!==false,options.analyzeContours!==false);\n    let leafVertices=0,lineVertices=0,leaves=0;\n    for(const s of fractal.shapes) {\n      if(s.stroke) lineVertices+=s.points.length*2;\n      else {leafVertices+=(s.points.length-2)*3;leaves++;}\n    }\n    const fill=new Float32Array(leafVertices*4),lines=new Float32Array(lineVertices*4);\n    let f=0,l=0;\n    function vertex(buffer,offset,p,s) {\n      buffer[offset]=p[0];buffer[offset+1]=p[1];buffer[offset+2]=s.color;buffer[offset+3]=s.alpha;\n      return offset+4;\n    }\n    for(const s of fractal.shapes) {\n      if(s.stroke) {\n        for(let k=0;k\u003cs.points.length;k++) {\n          l=vertex(lines,l,s.points[k],s);\n          l=vertex(lines,l,s.points[(k+1)%s.points.length],s);\n        }\n      } else {\n        for(let k=1;k\u003cs.points.length-1;k++) {\n          f=vertex(fill,f,s.points[0],s);f=vertex(fill,f,s.points[k],s);f=vertex(fill,f,s.points[k+1],s);\n        }\n      }\n    }\n    const boundary=new Float32Array(fractal.boundary.length*8);\n    let b=0;\n    for(let k=0;k\u003cfractal.boundary.length;k++) {\n      b=vertex(boundary,b,fractal.boundary[k],{color:0,alpha:.5});\n      b=vertex(boundary,b,fractal.boundary[(k+1)%fractal.boundary.length],{color:0,alpha:.5});\n    }\n    self.postMessage({id,index,depth,globalAxes,sectors:fractal.sectors,strictSymmetry:fractal.strictSymmetry,origin:fractal.origin,radius:fractal.radius,fill,lines,boundary,leaves,triangles:leafVertices/3,elapsed:performance.now()-start},[fill.buffer,lines.buffer,boundary.buffer,globalAxes.buffer]);\n  } catch(error) {self.postMessage({id,error:error.message});}\n};\n\nself.postMessage({offlineReady:true});\n"</script>
+<script>
+// Reflection axes of actual convex polygons after all transforms and clipping.
+const PatternSymmetry=(()=>{
+  function cleanPolygon(points) {
+    if(points.length<3)return [];
+    const span=Math.max(...points.map(p=>p[0]))-Math.min(...points.map(p=>p[0]))+
+      Math.max(...points.map(p=>p[1]))-Math.min(...points.map(p=>p[1]));
+    const tolerance=Math.max(span*1e-8,1e-10),result=[];
+    for(const p of points)if(!result.length||Math.hypot(p[0]-result.at(-1)[0],p[1]-result.at(-1)[1])>tolerance)result.push(p);
+    if(result.length>1&&Math.hypot(result[0][0]-result.at(-1)[0],result[0][1]-result.at(-1)[1])<=tolerance)result.pop();
+    let changed=true;
+    while(changed&&result.length>=3) {
+      changed=false;
+      for(let i=0;i<result.length;i++) {
+        const a=result[(i+result.length-1)%result.length],b=result[i],c=result[(i+1)%result.length];
+        const length=Math.hypot(c[0]-a[0],c[1]-a[1]);
+        if(length<=tolerance||Math.abs((b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]))<=tolerance*length) {
+          result.splice(i,1);changed=true;break;
+        }
+      }
+    }
+    return result.length>=3?result:[];
+  }
+  function axesForPolygon(input) {
+    const points=cleanPolygon(input),n=points.length;
+    if(n<3)return [];
+    const cx=points.reduce((s,p)=>s+p[0],0)/n,cy=points.reduce((s,p)=>s+p[1],0)/n;
+    const radius=Math.max(...points.map(p=>Math.hypot(p[0]-cx,p[1]-cy)));
+    const tolerance=Math.max(radius*1e-7,1e-9),axes=[];
+    // A reflection reverses the cyclic vertex order. Test every possible
+    // reversing permutation; this also covers axes through edge midpoints.
+    for(let shift=0;shift<n;shift++) {
+      let ux=0,uy=0,length=0;
+      for(let i=0;i<n&&length<=tolerance;i++) {
+        const p=points[i],q=points[(shift-i+n)%n];
+        ux=-(p[1]-q[1]);uy=p[0]-q[0];length=Math.hypot(ux,uy);
+      }
+      if(length<=tolerance)continue;
+      ux/=length;uy/=length;
+      let matches=true,min=Infinity,max=-Infinity;
+      for(let i=0;i<n;i++) {
+        const p=points[i],q=points[(shift-i+n)%n],x=p[0]-cx,y=p[1]-cy,t=x*ux+y*uy;
+        if(Math.hypot(cx+2*t*ux-x-q[0],cy+2*t*uy-y-q[1])>tolerance){matches=false;break;}
+        min=Math.min(min,t);max=Math.max(max,t);
+      }
+      if(matches) {
+        const margin=(max-min)*.12;
+        axes.push([cx+(min-margin)*ux,cy+(min-margin)*uy,cx+(max+margin)*ux,cy+(max+margin)*uy]);
+      }
+    }
+    return axes;
+  }
+  function convexHull(points) {
+    if(points.length<3)return [];
+    const sorted=points.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+    let ymin=Infinity,ymax=-Infinity;for(const p of sorted){ymin=Math.min(ymin,p[1]);ymax=Math.max(ymax,p[1]);}
+    const span=Math.hypot(sorted.at(-1)[0]-sorted[0][0],ymax-ymin);
+    const epsilon=Math.max(span*1e-10,1e-12),unique=[];
+    for(const p of sorted)if(!unique.length||Math.hypot(p[0]-unique.at(-1)[0],p[1]-unique.at(-1)[1])>epsilon)unique.push(p);
+    const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+    const lower=[],upper=[];
+    for(const p of unique){while(lower.length>1&&cross(lower.at(-2),lower.at(-1),p)<=epsilon*span)lower.pop();lower.push(p);}
+    for(let k=unique.length-1;k>=0;k--){const p=unique[k];while(upper.length>1&&cross(upper.at(-2),upper.at(-1),p)<=epsilon*span)upper.pop();upper.push(p);}
+    return lower.slice(0,-1).concat(upper.slice(0,-1));
+  }
+  function pattern(shapes,includeContours=true) {
+    const records=[];
+    for(const shape of shapes) {
+      if(shape.stroke&&!includeContours)continue;
+      const points=cleanPolygon(shape.points);if(points.length<3)continue;
+      const center=points.reduce((a,p)=>[a[0]+p[0]/points.length,a[1]+p[1]/points.length],[0,0]);
+      records.push({points,center,tag:(shape.stroke?'stroke:'+shape.stroke:'fill')+':'+shape.alpha});
+    }
+    const hull=convexHull(records.flatMap(r=>r.points));
+    if(hull.length<3)return {records,hull,candidates:[]};
+    return {records,hull,candidates:axesForPolygon(hull)};
+  }
+  function verifier(records,hull) {
+    const center=hull.reduce((a,p)=>[a[0]+p[0]/hull.length,a[1]+p[1]/hull.length],[0,0]);
+    const radius=Math.max(...hull.map(p=>Math.hypot(p[0]-center[0],p[1]-center[1])));
+    const epsilon=Math.max(radius*1e-7,1e-9),cell=4*epsilon,buckets=new Map();
+    const key=(x,y)=>x+','+y;
+    records.forEach((r,i)=>{const k=key(Math.floor(r.center[0]/cell),Math.floor(r.center[1]/cell));if(!buckets.has(k))buckets.set(k,[]);buckets.get(k).push(i);});
+    return axis=>{
+      const [cx,cy,ex,ey]=axis,length=Math.hypot(ex-cx,ey-cy),ux=(ex-cx)/length,uy=(ey-cy)/length,used=new Uint8Array(records.length);
+      const reflect=p=>{const x=p[0]-cx,y=p[1]-cy,t=x*ux+y*uy;return [cx+2*t*ux-x,cy+2*t*uy-y];};
+      for(const record of records) {
+        const c=reflect(record.center),bx=Math.floor(c[0]/cell),by=Math.floor(c[1]/cell),points=record.points.map(reflect);
+        let match=-1;
+        for(let dx=-1;dx<=1&&match<0;dx++)for(let dy=-1;dy<=1&&match<0;dy++) {
+          for(const i of buckets.get(key(bx+dx,by+dy))||[]) {
+            const target=records[i];
+            if(used[i]||target.tag!==record.tag||target.points.length!==points.length)continue;
+            if(Math.hypot(target.center[0]-c[0],target.center[1]-c[1])>epsilon)continue;
+            if(points.every(p=>target.points.some(q=>Math.hypot(p[0]-q[0],p[1]-q[1])<=epsilon))){match=i;break;}
+          }
+        }
+        if(match<0)return false;used[match]=1;
+      }
+      return true;
+    };
+  }
+  function axesForPattern(shapes,includeContours=true) {
+    const p=pattern(shapes,includeContours);
+    if(!p.candidates.length)return [];
+    return p.candidates.filter(verifier(p.records,p.hull));
+  }
+  function globalAxes(fractal,includeOutline=true,includeContours=true) {
+    // D_n is guaranteed by the mirrored-sector construction for every twist.
+    const axes=[],[cx,cy]=fractal.origin,r=fractal.radius*1.12,n=fractal.sectors;
+    for(let k=0;k<n;k++){const a=k*Math.PI/n,dx=Math.sin(a)*r,dy=Math.cos(a)*r;axes.push([cx-dx,cy-dy,cx+dx,cy+dy]);}
+    // A visible regular n-gon has precisely these axes, so no other axis of
+    // the whole picture can exist. Without it, inspect the actual pattern.
+    if(!includeOutline||n<3) {
+      const p=pattern(fractal.shapes,includeContours);
+      const extra=p.candidates.filter(a=>!axes.some(b=>{
+        const ux=a[2]-a[0],uy=a[3]-a[1],vx=b[2]-b[0],vy=b[3]-b[1],la=Math.hypot(ux,uy),lb=Math.hypot(vx,vy);
+        return Math.abs(ux*vy-uy*vx)<=1e-7*la*lb&&Math.abs((a[0]-b[0])*vy-(a[1]-b[1])*vx)<=1e-7*lb*fractal.radius;
+      }));
+      if(extra.length)axes.push(...extra.filter(verifier(p.records,p.hull)));
+    }
+    return new Float32Array(axes.flat());
+  }
+  return {axesForPolygon,axesForPattern,globalAxes};
+})();
+if(typeof module!=='undefined'&&module.exports)module.exports=PatternSymmetry;
+
+/* Deterministic, finite recursive approximations. No dependencies. */
+(function (scope) {
+  'use strict';
+  const PI = Math.PI;
+  const square = [[-.5,-.5],[.5,-.5],[.5,.5],[-.5,.5]];
+  const triangleRadius=1/Math.sqrt(3);
+  const triangle = [[0,-triangleRadius],[.5,triangleRadius/2],[-.5,triangleRadius/2]];
+  const variants = [
+    {id:'01-cantor-wir', title:'Cantor · wirujące narożniki', rule:'Cztery kopie, skala 0,34, obroty ±17°.', depth:4},
+    {id:'02-szachownica-fazowa', title:'Szachownica · zmiana fazy', rule:'Maski 5 i 4 pól na przemian; sinusoidalne wygięcie.', depth:5},
+    {id:'03-cantor-rombowy', title:'Cantor · romb w kwadracie', rule:'Cztery narożniki i piąta kopia obrócona o 45°.', depth:4},
+    {id:'04-sierpinski-spiralny', title:'Sierpiński · trójkątny wir', rule:'Trzy kopie, skale 0,49 / 0,45 / 0,47 i obrót 15°.', depth:6},
+    {id:'05-sierpinski-kalejdoskop', title:'Sierpiński · kalejdoskop', rule:'Sześć trójkątów, naprzemienne odbicia w rekurencji.', depth:6},
+    {id:'06-cantor-sierpinski', title:'Cantor × Sierpiński', rule:'Podziały trójkątne i cztery narożniki na przemian.', depth:5}
+  ];
+  function mul(a,b) {
+    return [a[0]*b[0]+a[2]*b[1], a[1]*b[0]+a[3]*b[1],
+      a[0]*b[2]+a[2]*b[3], a[1]*b[2]+a[3]*b[3],
+      a[0]*b[4]+a[2]*b[5]+a[4], a[1]*b[4]+a[3]*b[5]+a[5]];
+  }
+  function transform(scale,angle,x,y,reflect=false) {
+    const c=Math.cos(angle)*scale, s=Math.sin(angle)*scale, f=reflect?-1:1;
+    return [c*f,s*f,-s,c,x,y];
+  }
+  function point(m,p) {return [m[0]*p[0]+m[2]*p[1]+m[4],m[1]*p[0]+m[3]*p[1]+m[5]];}
+  function generate(index,depth=variants[index].depth,options={}) {
+    const strict=index===4&&options.strictSymmetry===true;
+    const sectors=index===4?(options.sectors ?? 6):null;
+    if(index===4&&(!Number.isInteger(sectors)||(strict?(sectors<1||sectors>60):(sectors!==6&&sectors!==12)))) {
+      throw new RangeError(strict?'Liczba sektorów musi być całkowita, od 1 do 60.':'Kalejdoskop obsługuje 6 lub 12 sektorów.');
+    }
+    const scaleMultiplier=options.scaleMultiplier ?? 1;
+    const twist=(options.twist ?? [17,0,45,15,0,7.5][index])*PI/180;
+    const warp=options.warp ?? .060;
+    const shapes=[];
+    let clipBoundary=null,boundary=[],outerRadius=1;
+    const id=[1,0,0,1,0,0];
+    function clip(points,polygon) {
+      // Sutherland–Hodgman clipping against a counterclockwise convex wedge.
+      for(let k=0;k<polygon.length&&points.length;k++) {
+        const a=polygon[k],b=polygon[(k+1)%polygon.length];
+        const side=p=>(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);
+        const output=[];let previous=points[points.length-1],pd=side(previous);
+        for(const current of points) {
+          const cd=side(current),pi=pd>=-1e-12,ci=cd>=-1e-12;
+          if(pi!==ci) {
+            const t=pd/(pd-cd);
+            output.push([previous[0]+t*(current[0]-previous[0]),previous[1]+t*(current[1]-previous[1])]);
+          }
+          if(ci)output.push(current);
+          previous=current;pd=cd;
+        }
+        points=output;
+      }
+      return points;
+    }
+    function add(m,vertices,color,alpha=1,stroke=0) {
+      let points=vertices.map(p=>point(m,p));
+      if(strict&&clipBoundary) {
+        points=clip(points,clipBoundary);
+        if(points.length<3)return;
+      }
+      if(index===1) points=points.map(([x,y])=>[x+warp*Math.sin(2*PI*y), y+warp*Math.sin(2*PI*x)]);
+      shapes.push({points,color,alpha,stroke});
+    }
+    function recur(m,level,color=0,sector=0) {
+      const left=depth-level;
+      const tri=index===3||index===4||(index===5&&level%2===0);
+      if(left===0) {add(m,tri?triangle:square,color);return;}
+      // Delicate earlier-generation contours reveal the recursive geometry.
+      if(level>0&&level<=3&&index!==1&&index!==5) {
+        add(m,tri?triangle:square,color,.22,.0006);
+      }
+      if(index===0||index===2) {
+        const r=(index===0?.34:.31)*scaleMultiplier;
+        const gap=(1-r)/2;
+        const centers=[[-gap,-gap],[gap,-gap],[gap,gap],[-gap,gap]];
+        centers.forEach(([x,y],k)=>{
+          const angle=index===0?(k%2?1:-1)*twist:0;
+          recur(mul(m,transform(r,angle,x,y)),level+1,level===0?k:color,sector);
+        });
+        if(index===2) recur(mul(m,transform(.235*scaleMultiplier,twist,0,0)),level+1,4,sector);
+      } else if(index===1) {
+        for(let y=0;y<3;y++) for(let x=0;x<3;x++) {
+          if((x+y)%2===level%2) {
+            const col=level===0?(x+2*y)%5:color;
+            recur(mul(m,transform(scaleMultiplier/3,(x+y)%2?-twist:twist,(x-1)/3,(y-1)/3)),level+1,col,sector);
+          }
+        }
+      } else if(index===3||index===4||(index===5&&level%2===0)) {
+        triangle.forEach(([x,y],k)=>{
+          const r=(index===3?[.49,.45,.47][k]:index===4?.49:.48)*scaleMultiplier;
+          const angle=index===3||index===4?twist:0;
+          const mirror=index===4&&(k+level+sector)%2===1;
+          const col=level===0&&index!==4?k:color;
+          recur(mul(m,transform(r,angle,(1-r)*x,(1-r)*y,mirror)),level+1,col,sector);
+        });
+      } else {
+        const r=.32*scaleMultiplier, gap=(1-r)/2;
+        [[-gap,-gap],[gap,-gap],[gap,gap],[-gap,gap]].forEach(([x,y],k)=>{
+          recur(mul(m,transform(r,(k%2?1:-1)*twist,x,y)),level+1,color,sector);
+        });
+      }
+    }
+    if(index===4) {
+      // For n>=3, the wedge angle is 360/n. Values 1 and 2 use one or
+      // two finite motifs: a regular one- or two-sided polygon is degenerate.
+      const squeeze=sectors>=3?Math.tan(PI/sectors)/Math.tan(PI/6):1;
+      outerRadius=Math.hypot(.5*squeeze,1.5*triangleRadius);
+      const needsReflection=Math.abs(Math.sin(3*twist))>1e-10;
+      for(let k=0;k<sectors;k++) {
+        const angle=k*2*PI/sectors;
+        const outer=transform(1,angle,-Math.sin(angle)*triangleRadius,Math.cos(angle)*triangleRadius);
+        const root=mul(outer,[squeeze,0,0,1,0,0]);
+        if(strict) {
+          clipBoundary=triangle.map(p=>point(root,p));
+          if(sectors>=3)boundary.push(clipBoundary[2]);
+        }
+        recur(root,0,k%5,strict?0:k);
+        if(strict&&needsReflection)recur(mul(root,[-1,0,0,1,0,0]),0,k%5,0);
+      }
+    } else recur(id,0);
+    let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+    for(const shape of shapes) for(const [x,y] of shape.points) {
+      minX=Math.min(minX,x);maxX=Math.max(maxX,x);
+      minY=Math.min(minY,y);maxY=Math.max(maxY,y);
+    }
+    for(const [x,y] of boundary) {
+      minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);
+    }
+    const centered=strict&&sectors>=2;
+    const span=centered?2*Math.max(Math.abs(minX),Math.abs(maxX),Math.abs(minY),Math.abs(maxY)):Math.max(maxX-minX,maxY-minY);
+    const factor=900/span;
+    const cx=centered?0:(minX+maxX)/2,cy=centered?0:(minY+maxY)/2;
+    const normalize=([x,y])=>[500+(x-cx)*factor,500+(y-cy)*factor];
+    shapes.forEach(s=>{
+      s.points=s.points.map(normalize);
+      s.stroke*=factor;
+    });
+    return {...variants[index],depth,sectors,strictSymmetry:strict,shapes,boundary:boundary.map(normalize),origin:normalize([0,0]),radius:outerRadius*factor};
+  }
+  function kaleidoscopeDepthLimit(sectors) {
+    if(!Number.isInteger(sectors)||sectors<1||sectors>60)throw new RangeError('Liczba sektorów musi być całkowita, od 1 do 60.');
+    let depth=1;
+    // Reserve both the motif and its mirror, even at angles where they
+    // coincide. This keeps the limit stable while the angle is adjusted.
+    while(depth<10&&2*sectors*3**(depth+1)<=160000)depth++;
+    return depth;
+  }
+  const api={variants,generate,kaleidoscopeDepthLimit};
+  if(typeof module!=='undefined'&&module.exports) module.exports=api;
+  else scope.FractalSet=api;
+})(typeof window!=='undefined'?window:globalThis);
+
+
+function createOfflineWorker() {
+  const facade={onmessage:null,onerror:null,postMessage:post,terminate:terminate};
+  let native=null,blobURL=null,watchdog=null,pending=null,lastTask=null;
+  let fallback=false,stopped=false,execute=null;
+  window.offlineKaleidoscopeMode='starting';
+  function releaseURL() {
+    if(blobURL){URL.revokeObjectURL(blobURL);blobURL=null;}
+  }
+  function makeExecutor() {
+    const self={postMessage(message){
+      if(!stopped&&facade.onmessage)facade.onmessage({data:message});
+    }};
+    'use strict';
+
+self.onmessage=function(event) {
+  const {id,index,depth,options}=event.data;
+  const start=performance.now();
+  try {
+    const fractal=FractalSet.generate(index,depth,options);
+    const globalAxes=PatternSymmetry.globalAxes(fractal,options.analyzeOutline!==false,options.analyzeContours!==false);
+    let leafVertices=0,lineVertices=0,leaves=0;
+    for(const s of fractal.shapes) {
+      if(s.stroke) lineVertices+=s.points.length*2;
+      else {leafVertices+=(s.points.length-2)*3;leaves++;}
+    }
+    const fill=new Float32Array(leafVertices*4),lines=new Float32Array(lineVertices*4);
+    let f=0,l=0;
+    function vertex(buffer,offset,p,s) {
+      buffer[offset]=p[0];buffer[offset+1]=p[1];buffer[offset+2]=s.color;buffer[offset+3]=s.alpha;
+      return offset+4;
+    }
+    for(const s of fractal.shapes) {
+      if(s.stroke) {
+        for(let k=0;k<s.points.length;k++) {
+          l=vertex(lines,l,s.points[k],s);
+          l=vertex(lines,l,s.points[(k+1)%s.points.length],s);
+        }
+      } else {
+        for(let k=1;k<s.points.length-1;k++) {
+          f=vertex(fill,f,s.points[0],s);f=vertex(fill,f,s.points[k],s);f=vertex(fill,f,s.points[k+1],s);
+        }
+      }
+    }
+    const boundary=new Float32Array(fractal.boundary.length*8);
+    let b=0;
+    for(let k=0;k<fractal.boundary.length;k++) {
+      b=vertex(boundary,b,fractal.boundary[k],{color:0,alpha:.5});
+      b=vertex(boundary,b,fractal.boundary[(k+1)%fractal.boundary.length],{color:0,alpha:.5});
+    }
+    self.postMessage({id,index,depth,globalAxes,sectors:fractal.sectors,strictSymmetry:fractal.strictSymmetry,origin:fractal.origin,radius:fractal.radius,fill,lines,boundary,leaves,triangles:leafVertices/3,elapsed:performance.now()-start},[fill.buffer,lines.buffer,boundary.buffer,globalAxes.buffer]);
+  } catch(error) {self.postMessage({id,error:error.message});}
+};
+
+    return self.onmessage;
+  }
+  function enqueue(task) {
+    clearTimeout(pending);
+    pending=setTimeout(()=>{pending=null;if(!stopped)execute({data:task});},16);
+  }
+  function useFallback() {
+    if(stopped||fallback)return;
+    fallback=true;clearTimeout(watchdog);
+    if(native){native.terminate();native=null;}
+    releaseURL();execute=makeExecutor();window.offlineKaleidoscopeMode='fallback';
+    if(lastTask)enqueue(lastTask);
+  }
+  function post(task) {
+    if(stopped)return;
+    lastTask=task;
+    if(fallback)enqueue(task);
+    else {
+      try {native.postMessage(task);}catch {useFallback();}
+    }
+  }
+  function terminate() {
+    stopped=true;clearTimeout(watchdog);clearTimeout(pending);
+    if(native)native.terminate();releaseURL();
+  }
+  try {
+    const source=JSON.parse(document.getElementById('offline-worker-source').textContent);
+    blobURL=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+    native=new Worker(blobURL);
+    native.onmessage=event=>{
+      if(event.data&&event.data.offlineReady){
+        clearTimeout(watchdog);releaseURL();window.offlineKaleidoscopeMode='worker';return;
+      }
+      if(facade.onmessage)facade.onmessage(event);
+    };
+    native.onerror=event=>{event.preventDefault();useFallback();};
+    watchdog=setTimeout(useFallback,3000);
+  } catch {useFallback();}
+  return facade;
+}
+
+(function () {
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const canvas=$('fractal-canvas');
+  const dedicated=document.body.dataset.mode==='kaleidoscope';
+  const controls={depth:$('depth'),twist:$('twist'),scale:$('scale'),warp:$('warp')};
+  const titles=['Wirujące narożniki','Zmiana fazy','Romb w kwadracie','Trójkątny wir','Kalejdoskop','Cantor × Sierpiński'];
+  const families=['Kwadrat Cantora','Szachownica Cantora','Kwadrat Cantora','Trójkąt Sierpińskiego','Trójkąt Sierpińskiego','Konstrukcja hybrydowa'];
+  const twists=[17,0,45,15,0,7.5];
+  const maxDepth=[8,8,7,10,9,9];
+  const palettes={
+    mineral:['#69efd7','#dca8fc','#ffbf78','#89baff','#fb91ad'],
+    neon:['#51ffcd','#cd85ff','#ffee82','#52c9ff','#ff6faa'],
+    warm:['#ffcaa0','#e8a282','#ffa372','#e2be9e','#ff8a9c'],
+    mono:['#dbe5f2','#c6d5e7','#ffffff','#a7bad3','#eef3fa']
+  };
+  const number=new Intl.NumberFormat('pl-PL');
+  let index=dedicated?4:0,job=0,timer,worker,geometry=null,gl,program,fillBuffer,lineBuffer,boundaryBuffer,locations;
+  let camera={x:500,y:500,zoom:1},contextLost=false;
+  const pointers=new Map();
+  let gesture=null;
+
+  if(dedicated) {
+    const n=Number(new URLSearchParams(location.search).get('n')||new URLSearchParams(location.hash.slice(1)).get('n')||12);
+    $('sectors').value=Number.isInteger(n)&&n>=1&&n<=60?n:12;
+  }
+  if(!dedicated)FractalSet.variants.forEach((v,i)=>{
+    const button=document.createElement('button');
+    button.type='button';button.className='variant-button';button.dataset.index=i;
+    button.setAttribute('aria-pressed',String(i===0));
+    const num=document.createElement('span');num.className='variant-number';num.textContent=String(i+1).padStart(2,'0');
+    const label=document.createElement('span');label.className='variant-label';
+    const name=document.createElement('span');name.className='variant-name';name.textContent=titles[i];
+    const family=document.createElement('span');family.className='variant-family';family.textContent=families[i];
+    label.append(name,family);button.append(num,label);
+    button.addEventListener('click',()=>selectVariant(i));$('variants').append(button);
+  });
+
+  function error(message) {
+    $('busy').hidden=true;$('canvas-error').hidden=false;$('canvas-error').textContent=message;
+    $('engine-label').textContent='WebGL niedostępny';
+  }
+  function compile(type,source) {
+    const shader=gl.createShader(type);gl.shaderSource(shader,source);gl.compileShader(shader);
+    if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)) {
+      const message=gl.getShaderInfoLog(shader);gl.deleteShader(shader);throw Error(message);
+    }
+    return shader;
+  }
+  function setupGL() {
+    gl=canvas.getContext('webgl',{alpha:false,antialias:true,powerPreference:'high-performance'});
+    if(!gl) throw Error('Przeglądarka nie udostępnia WebGL. Włącz akcelerację sprzętową lub otwórz stronę w przeglądarce obsługującej WebGL.');
+    const vertex=compile(gl.VERTEX_SHADER,`
+      attribute vec2 a_position;
+      attribute float a_branch;
+      attribute float a_opacity;
+      uniform vec2 u_center;
+      uniform vec2 u_scale;
+      uniform lowp vec3 u_palette[5];
+      varying lowp vec4 v_color;
+      varying mediump vec2 v_position;
+      void main() {
+        vec2 p=(a_position-u_center)*u_scale;
+        gl_Position=vec4(p.x,-p.y,0.0,1.0);
+        vec3 color=u_palette[0];
+        if(a_branch>0.5) color=u_palette[1];
+        if(a_branch>1.5) color=u_palette[2];
+        if(a_branch>2.5) color=u_palette[3];
+        if(a_branch>3.5) color=u_palette[4];
+        v_color=vec4(color,a_opacity);
+        v_position=a_position;
+      }
+    `);
+    const fragment=compile(gl.FRAGMENT_SHADER,`
+      precision mediump float;
+      varying lowp vec4 v_color;
+      varying mediump vec2 v_position;
+      uniform lowp vec3 u_palette[5];
+      uniform bool u_radial;
+      uniform vec2 u_origin;
+      uniform float u_radius;
+      void main() {
+        vec3 color=v_color.rgb;
+        if(u_radial) {
+          float t=clamp(length(v_position-u_origin)/u_radius,0.0,1.0)*4.0;
+          if(t<1.0) color=mix(u_palette[0],u_palette[1],t);
+          else if(t<2.0) color=mix(u_palette[1],u_palette[2],t-1.0);
+          else if(t<3.0) color=mix(u_palette[2],u_palette[3],t-2.0);
+          else color=mix(u_palette[3],u_palette[4],t-3.0);
+        }
+        gl_FragColor=vec4(color,v_color.a);
+      }
+    `);
+    program=gl.createProgram();gl.attachShader(program,vertex);gl.attachShader(program,fragment);gl.linkProgram(program);
+    gl.deleteShader(vertex);gl.deleteShader(fragment);
+    if(!gl.getProgramParameter(program,gl.LINK_STATUS)) throw Error(gl.getProgramInfoLog(program));
+    locations={position:gl.getAttribLocation(program,'a_position'),branch:gl.getAttribLocation(program,'a_branch'),opacity:gl.getAttribLocation(program,'a_opacity'),center:gl.getUniformLocation(program,'u_center'),scale:gl.getUniformLocation(program,'u_scale'),palette:gl.getUniformLocation(program,'u_palette[0]'),radial:gl.getUniformLocation(program,'u_radial'),origin:gl.getUniformLocation(program,'u_origin'),radius:gl.getUniformLocation(program,'u_radius')};
+    fillBuffer=gl.createBuffer();lineBuffer=gl.createBuffer();boundaryBuffer=gl.createBuffer();
+    gl.useProgram(program);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+    gl.clearColor(11/255,16/255,25/255,1);
+    $('engine-label').textContent='WebGL · GPU';
+    $('canvas-error').hidden=true;
+    if(geometry) uploadGeometry();
+  }
+  function uploadGeometry() {
+    if(!gl||contextLost||!geometry)return;
+    gl.bindBuffer(gl.ARRAY_BUFFER,fillBuffer);gl.bufferData(gl.ARRAY_BUFFER,geometry.fill,gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER,lineBuffer);gl.bufferData(gl.ARRAY_BUFFER,geometry.lines,gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER,boundaryBuffer);gl.bufferData(gl.ARRAY_BUFFER,geometry.boundary,gl.STATIC_DRAW);
+    draw();
+  }
+  function attributes(buffer) {
+    gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
+    gl.enableVertexAttribArray(locations.position);gl.vertexAttribPointer(locations.position,2,gl.FLOAT,false,16,0);
+    gl.enableVertexAttribArray(locations.branch);gl.vertexAttribPointer(locations.branch,1,gl.FLOAT,false,16,8);
+    gl.enableVertexAttribArray(locations.opacity);gl.vertexAttribPointer(locations.opacity,1,gl.FLOAT,false,16,12);
+  }
+  function draw() {
+    if(!gl||contextLost)return;
+    const rect=canvas.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,2);
+    const w=Math.max(1,Math.round(rect.width*ratio)),h=Math.max(1,Math.round(rect.height*ratio));
+    if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+    gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT);
+    if(!geometry){drawSymmetryAxes();return;}
+    gl.useProgram(program);
+    const s=Math.min(w,h)/1100*camera.zoom;
+    gl.uniform2f(locations.center,camera.x,camera.y);gl.uniform2f(locations.scale,2*s/w,2*s/h);
+    const colors=palettes[$('palette').value].flatMap(hex=>{
+      const n=parseInt(hex.slice(1),16);return [(n>>16&255)/255,(n>>8&255)/255,(n&255)/255];
+    });
+    gl.uniform3fv(locations.palette,new Float32Array(colors));
+    gl.uniform1i(locations.radial,dedicated?1:0);
+    gl.uniform2f(locations.origin,geometry.origin[0],geometry.origin[1]);gl.uniform1f(locations.radius,geometry.radius);
+    if($('contours').checked&&geometry.lines.length){attributes(lineBuffer);gl.drawArrays(gl.LINES,0,geometry.lines.length/4);}
+    attributes(fillBuffer);gl.drawArrays(gl.TRIANGLES,0,geometry.fill.length/4);
+    if(dedicated&&$('outline').checked&&geometry.boundary.length){attributes(boundaryBuffer);gl.drawArrays(gl.LINES,0,geometry.boundary.length/4);}
+    $('zoom-value').textContent=number.format(Number(camera.zoom.toFixed(camera.zoom>=10?0:1)))+'×';
+    $('zoom-out').disabled=camera.zoom<=.25;$('zoom-in').disabled=camera.zoom>=1000;
+    drawSymmetryAxes();
+  }
+function drawSymmetryAxes() {
+  drawGlobalAxes();drawPatternAxes();
+}
+function drawGlobalAxes() {
+  const overlay=$('symmetry-axes');
+  overlay.toggleAttribute('hidden',!geometry||!$('axes-show').checked);
+  if(overlay.hasAttribute('hidden'))return;
+  const lines=overlay.querySelector('.guide-lines');
+  const rect=canvas.getBoundingClientRect(),scale=Math.min(rect.width,rect.height)/1100*camera.zoom;
+  const n=geometry.sectors,ns='http://www.w3.org/2000/svg';
+  if(overlay.dataset.n!==String(n)) {
+    lines.replaceChildren();overlay.dataset.n=String(n);
+    for(let k=0;k<n;k++) {
+      const group=document.createElementNS(ns,'g');group.dataset.axis=String(k);
+      for(const name of ['axis-halo','axis-line']) {
+        const line=document.createElementNS(ns,'line');line.setAttribute('class',name);group.append(line);
+      }
+      lines.append(group);
+    }
+  }
+  overlay.setAttribute('viewBox','0 0 '+rect.width+' '+rect.height);
+  const x=rect.width/2+(geometry.origin[0]-camera.x)*scale,y=rect.height/2+(geometry.origin[1]-camera.y)*scale;
+  const radius=geometry.radius*1.12*scale;
+  [...lines.children].forEach((group,k)=>{
+    const dx=Math.sin(k*Math.PI/n)*radius,dy=Math.cos(k*Math.PI/n)*radius;
+    for(const line of group.children) {
+      line.setAttribute('x1',x-dx);line.setAttribute('y1',y-dy);
+      line.setAttribute('x2',x+dx);line.setAttribute('y2',y+dy);
+    }
+  });
+}
+function drawPatternAxes() {
+  const overlay=$('global-axes');
+  overlay.hidden=!geometry||$('global-hide').checked;
+  if(!geometry)return;
+  const rect=canvas.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,2);
+  const width=Math.max(1,Math.round(rect.width*ratio)),height=Math.max(1,Math.round(rect.height*ratio));
+  if(overlay.width!==width||overlay.height!==height){overlay.width=width;overlay.height=height;}
+  const ctx=overlay.getContext('2d');ctx.setTransform(width/rect.width,0,0,height/rect.height,0,0);
+  ctx.clearRect(0,0,rect.width,rect.height);
+  const scale=Math.min(rect.width,rect.height)/1100*camera.zoom,path=new Path2D(),axes=geometry.globalAxes;
+  let visible=0;
+  for(let i=0;i<axes.length;i+=4) {
+    const x1=rect.width/2+(axes[i]-camera.x)*scale,y1=rect.height/2+(axes[i+1]-camera.y)*scale;
+    const x2=rect.width/2+(axes[i+2]-camera.x)*scale,y2=rect.height/2+(axes[i+3]-camera.y)*scale;
+    if(Math.hypot(x2-x1,y2-y1)<14)continue;
+    if(Math.max(x1,x2)<0||Math.min(x1,x2)>rect.width||Math.max(y1,y2)<0||Math.min(y1,y2)>rect.height)continue;
+    path.moveTo(x1,y1);path.lineTo(x2,y2);visible++;
+  }
+  overlay.dataset.visible=String(visible);overlay.dataset.count=String(axes.length/4);
+  if(!overlay.hidden) {
+    ctx.lineCap='round';ctx.setLineDash([]);ctx.strokeStyle='#0b1019';ctx.lineWidth=4;ctx.stroke(path);
+    ctx.setLineDash([6,4]);ctx.strokeStyle='#76e8ff';ctx.lineWidth=1.6;ctx.stroke(path);
+  }
+  $('global-note').textContent='Potwierdzone osie całego wzoru: '+number.format(axes.length/4)+'. Obrót kopii zachowuje osie Dₙ — nie obraca ich razem z wnętrzem.';
+  if(axes.length/4>geometry.sectors)$('global-note').textContent+=' Potwierdzono dodatkowe osie poza Dₙ.';
+  if($('global-hide').checked)$('global-note').textContent='Niebieskie osie są ukryte.';
+}
+window.globalAxisDiagnostics=()=>({count:(geometry?.globalAxes.length||0)/4,
+  visible:Number($('global-axes').dataset.visible||0),sample:Array.from(geometry?.globalAxes.slice(0,48)||[])});
+
+  function fit() {camera={x:500,y:500,zoom:1};draw();}
+  function screenToWorld(x,y) {
+    const rect=canvas.getBoundingClientRect(),scale=Math.min(rect.width,rect.height)/1100*camera.zoom;
+    return {x:camera.x+(x-rect.left-rect.width/2)/scale,y:camera.y+(y-rect.top-rect.height/2)/scale};
+  }
+  function zoom(factor,x,y) {
+    const rect=canvas.getBoundingClientRect();
+    x ??=rect.left+rect.width/2;y ??=rect.top+rect.height/2;
+    const before=screenToWorld(x,y);camera.zoom=Math.max(.25,Math.min(1000,camera.zoom*factor));
+    const after=screenToWorld(x,y);camera.x+=before.x-after.x;camera.y+=before.y-after.y;draw();
+  }
+  function updateValues() {
+    $('depth-value').value=controls.depth.value;
+    $('twist-value').value=number.format(Number(controls.twist.value))+'°';
+    $('scale-value').value=controls.scale.value+'%';
+    $('warp-value').value=controls.warp.value+'%';
+    const r=Number(controls.scale.value)/100,a=Number(controls.twist.value),warp=Number(controls.warp.value);
+    const scale=v=>number.format(Number((v*r).toFixed(3)));
+    const sectors=Number($('sectors').value);
+    const descriptions=[
+      `Cztery kopie przy narożnikach. Skala ${scale(.34)}, obroty na przemian +${number.format(a)}° i ${number.format(-a)}°.`,
+      `Podział 3 × 3. Co iterację zmiana maski: 5 albo 4 pola. Skala ${scale(1/3)}, obrót ${number.format(a)}°, wygięcie ${warp}%.`,
+      `Cztery narożniki w skali ${scale(.31)} i dodatkowa środkowa kopia w skali ${scale(.235)}, obrócona o ${number.format(a)}°.`,
+      `Trzy kopie przy wierzchołkach. Skale ${scale(.49)} / ${scale(.45)} / ${scale(.47)}. Każda obraca się o ${number.format(a)}°.`,
+      `${sectors===12?'Dwanaście':'Sześć'} trójkątnych sektorów wokół wspólnego środka, co ${360/sectors}°. Kopie w skali ${scale(.49)} z naprzemiennymi odbiciami i obrotem ${number.format(a)}°.`,
+      `Na przemian: trzy kopie trójkątne (${scale(.48)}) i cztery narożniki kwadratu (${scale(.32)}), obrócone o ±${number.format(a)}°.`
+    ];
+    $('rule').textContent=descriptions[index];
+    if(index===4) {
+      if(dedicated) {
+        const title=sectors>=3?'Kalejdoskop · n = '+sectors:sectors===1?'Kalejdoskop · jeden motyw':'Kalejdoskop · dwa motywy';
+        $('fractal-title').textContent=title;canvas.setAttribute('aria-label',title);
+        $('family').textContent=sectors>=3?'WIELOKĄT FOREMNY':'UKŁAD MOTYWÓW';
+        $('sectors-number').value=sectors;
+        $('symmetry-order').textContent='D'+String(sectors).replace(/\d/g,d=>'₀₁₂₃₄₅₆₇₈₉'[Number(d)]);
+        $('symmetry-less').disabled=sectors<=1;$('symmetry-more').disabled=sectors>=60;
+        $('axes-note').textContent='Osie odbicia: '+sectors+' · co '+number.format(Number((180/sectors).toFixed(2)))+'°.';
+        $('shape-note').textContent=sectors>=3?`${sectors} boków · sektory co ${number.format(Number((360/sectors).toFixed(2)))}°.`:sectors===1?'n=1: pojedynczy motyw z odbiciem lustrzanym.':'n=2: dwa przeciwległe motywy. Dla n<3 nie powstaje regularny wielokąt.';
+        $('symmetry-badge').textContent='D'+String(sectors).replace(/\d/g,d=>'₀₁₂₃₄₅₆₇₈₉'[Number(d)]);
+        $('outline').disabled=sectors<3;
+        $('polygon-presets').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.n)===sectors)));
+        $('rule').textContent=`${sectors>=3?'Motyw przycięty do trójkątnego sektora wielokąta.':'Trójkątny motyw.'} Ta sama konstrukcja i jej odbicie powtarzają się ${sectors} razy. Skala kopii ${scale(.49)}, obrót ${number.format(a)}°. Symetria kształtu i kolorów pozostaje zachowana.`;
+        try {
+          const url=new URL(location.href);
+          if(location.protocol==='file:')url.hash='n='+sectors;
+          else url.searchParams.set('n',sectors);
+          history.replaceState(null,'',url);
+        } catch { /* Local document viewers may prohibit History API writes. */ }
+      } else {
+        $('fractal-title').textContent='Kalejdoskop · '+sectors+' sektorów';
+        canvas.setAttribute('aria-label','Interaktywny fraktal 2D: kalejdoskop, '+sectors+' sektorów.');
+      }
+    }
+  }
+  function rebuild(immediate=false) {
+    clearTimeout(timer);updateValues();
+    // Invalidate an older worker result before the debounce delay.
+    const current=++job;$('busy').hidden=false;
+    const run=()=>{
+      if(!worker)return;
+      worker.postMessage({id:current,index,depth:Number(controls.depth.value),options:{twist:Number(controls.twist.value),scaleMultiplier:Number(controls.scale.value)/100,warp:Number(controls.warp.value)/100,sectors:Number($('sectors').value),strictSymmetry:dedicated,analyzeOutline:$('outline').checked,analyzeContours:$('contours').checked}});
+    };
+    if(immediate)run();else timer=setTimeout(run,140);
+  }
+  function updateDepthLimit() {
+    controls.depth.max=dedicated?FractalSet.kaleidoscopeDepthLimit(Number($('sectors').value)):index===4&&$('sectors').value==='12'?8:maxDepth[index];
+    controls.depth.value=Math.min(Number(controls.depth.value),Number(controls.depth.max));
+    if(dedicated)$('depth-hint').textContent='Maks. '+controls.depth.max+' iteracji przy n = '+$('sectors').value+'.';
+  }
+  function defaults(resetSectors=true) {
+    if(resetSectors&&index===4)$('sectors').value=dedicated?'12':'6';
+    updateDepthLimit();
+    controls.depth.value=FractalSet.variants[index].depth;
+    controls.twist.step=index===5?'0.5':'1';controls.twist.value=twists[index];
+    controls.scale.value=100;controls.warp.value=6;
+    $('contours').checked=true;rebuild(true);
+  }
+  function selectVariant(i) {
+    index=i;updateDepthLimit();
+    $('variants').querySelectorAll('button').forEach((b,k)=>b.setAttribute('aria-pressed',String(k===i)));
+    $('fractal-title').textContent=titles[index];$('family').textContent=families[index].toLocaleUpperCase('pl');
+    canvas.setAttribute('aria-label','Interaktywny fraktal 2D: '+titles[index]);
+    $('warp-group').hidden=index!==1;
+    $('sectors-group').hidden=index!==4;
+    $('contours').closest('label').hidden=index===1||index===5;
+    // Remove the previous selection while its successor is being computed.
+    geometry=null;fit();defaults(false);
+  }
+
+  canvas.addEventListener('wheel',event=>{
+    event.preventDefault();
+    let delta=event.deltaY;
+    if(event.deltaMode===1)delta*=16;if(event.deltaMode===2)delta*=canvas.clientHeight;
+    zoom(Math.exp(-Math.max(-250,Math.min(250,delta))*.002),event.clientX,event.clientY);
+  },{passive:false});
+  function measureGesture() {
+    const p=[...pointers.values()];if(!p.length)return null;
+    if(p.length===1)return {x:p[0].x,y:p[0].y,distance:0};
+    return {x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2,distance:Math.hypot(p[1].x-p[0].x,p[1].y-p[0].y)};
+  }
+  canvas.addEventListener('pointerdown',event=>{
+    if(event.pointerType==='mouse'&&event.button!==0)return;
+    canvas.focus({preventScroll:true});canvas.setPointerCapture(event.pointerId);
+    pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});gesture=measureGesture();canvas.classList.add('dragging');
+  });
+  canvas.addEventListener('pointermove',event=>{
+    if(!pointers.has(event.pointerId))return;
+    pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    const next=measureGesture();if(!gesture||!next){gesture=next;return;}
+    const before=screenToWorld(gesture.x,gesture.y);
+    if(next.distance>0&&gesture.distance>0)camera.zoom=Math.max(.25,Math.min(1000,camera.zoom*next.distance/gesture.distance));
+    const after=screenToWorld(next.x,next.y);camera.x+=before.x-after.x;camera.y+=before.y-after.y;
+    gesture=next;draw();
+  });
+  function release(event) {pointers.delete(event.pointerId);gesture=measureGesture();if(!pointers.size)canvas.classList.remove('dragging');}
+  canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',release);canvas.addEventListener('lostpointercapture',release);
+  canvas.addEventListener('dblclick',event=>zoom(2,event.clientX,event.clientY));
+  canvas.addEventListener('keydown',event=>{
+    const scale=Math.min(canvas.clientWidth,canvas.clientHeight)/1100*camera.zoom;
+    if(event.key==='+'||event.key==='=')zoom(1.4);
+    else if(event.key==='-')zoom(1/1.4);
+    else if(event.key==='Home'||event.key==='0')fit();
+    else if(event.key==='ArrowLeft')camera.x-=50/scale;
+    else if(event.key==='ArrowRight')camera.x+=50/scale;
+    else if(event.key==='ArrowUp')camera.y-=50/scale;
+    else if(event.key==='ArrowDown')camera.y+=50/scale;
+    else return;
+    event.preventDefault();draw();
+  });
+  $('zoom-in').addEventListener('click',()=>zoom(1.5));$('zoom-out').addEventListener('click',()=>zoom(1/1.5));$('fit').addEventListener('click',fit);
+  Object.values(controls).forEach(c=>c.addEventListener('input',()=>rebuild()));
+  $('sectors').addEventListener(dedicated?'input':'change',()=>{updateDepthLimit();rebuild(!dedicated);});
+  if(dedicated) {
+    function chooseN(n) {
+      n=Math.round(Number(n));if(!Number.isFinite(n))n=Number($('sectors').value);
+      $('sectors').value=Math.max(1,Math.min(60,n));updateDepthLimit();rebuild(true);
+    }
+    $('sectors-number').addEventListener('change',event=>chooseN(event.target.value||$('sectors').value));
+    $('symmetry-less').addEventListener('click',()=>chooseN(Number($('sectors').value)-1));
+    $('symmetry-more').addEventListener('click',()=>chooseN(Number($('sectors').value)+1));
+    for(const id of ['axes-show','axes-hide','global-show','global-hide'])$(id).addEventListener('change',draw);
+    $('polygon-presets').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>chooseN(b.dataset.n)));
+    $('outline').addEventListener('change',()=>rebuild(true));
+  }
+  $('palette').addEventListener('change',draw);$('contours').addEventListener('change',()=>rebuild(true));$('defaults').addEventListener('click',()=>defaults());
+  $('fullscreen').hidden=!document.documentElement.requestFullscreen;
+  $('fullscreen').addEventListener('click',async()=>{
+    try {if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}
+    catch { $('fullscreen').textContent='Pełny ekran niedostępny'; }
+  });
+  document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent=document.fullscreenElement?'Wyjdź z pełnego ekranu':'Pełny ekran';draw();});
+  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();contextLost=true;error('Utracono połączenie z GPU. Czekam na przywrócenie WebGL…');});
+  canvas.addEventListener('webglcontextrestored',()=>{contextLost=false;try{setupGL();draw();}catch(e){error(e.message);}});
+  new ResizeObserver(draw).observe(canvas);
+  try {
+    setupGL();
+    worker=createOfflineWorker();
+    worker.onmessage=event=>{
+      const result=event.data;if(result.id!==job)return;
+      if(result.error){error('Nie udało się zbudować fraktala: '+result.error);return;}
+      geometry=result;$('busy').hidden=true;$('canvas-error').hidden=true;
+      $('geometry-info').textContent=number.format(result.leaves)+' figur · '+number.format(result.triangles)+' trójkątów';
+      uploadGeometry();
+    };
+    worker.onerror=()=>error('Nie udało się uruchomić obliczeń. Zamknij plik i otwórz go ponownie w przeglądarce obsługującej JavaScript i WebGL.');
+    selectVariant(dedicated?4:0);
+  } catch(e) {error(e.message);}
+  // Read-only diagnostics for browser verification, also useful in DevTools.
+  window.fractalDiagnostics=()=>({renderer:gl?'WebGL':null,contextLost,variant:index,depth:geometry?.depth,sectors:geometry?.sectors,strictSymmetry:geometry?.strictSymmetry,leaves:geometry?.leaves,triangles:geometry?.triangles,elapsed:geometry?.elapsed,zoom:camera.zoom,center:{x:camera.x,y:camera.y},glError:gl&&!contextLost?gl.getError():null,busy:!$('busy').hidden});
+})();
+
+</script>
+</body>
+</html>
