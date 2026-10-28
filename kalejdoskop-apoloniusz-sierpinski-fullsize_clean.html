@@ -1,0 +1,568 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MIT
+Copyright (c) 2026 FractalBoy9X (https://github.com/FractalBoy9X)
+See LICENSE for the full license text. -->
+
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1019"><link rel="icon" href="data:,"><title>Apoloniusz × Sierpiński · 003 · Hiperboloida jednopowłokowa</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1019;--panel:#111a26;--line:#283445;--text:#e8eef7;--muted:#9cacc1;--mint:#81ebcf;font:14px system-ui,-apple-system,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text)}button,input,select{font:inherit}button,select{cursor:pointer}button{color:inherit;background:#192535;border:1px solid #344356;border-radius:7px;padding:9px 12px}button:hover{border-color:var(--mint)}button:focus-visible,input:focus-visible,select:focus-visible,canvas:focus-visible{outline:2px solid var(--mint);outline-offset:3px}input{accent-color:var(--mint)}[hidden]{display:none!important}header{min-height:72px;padding:16px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}h1{font-size:17px;margin:0;font-weight:550;letter-spacing:.03em}.sub{color:var(--muted);font-size:12px;margin-top:5px}.header-actions{display:flex;gap:10px;align-items:center}.live{font-size:11px;color:var(--mint)}main{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:calc(100dvh - 77px)}aside{padding:22px 20px;background:var(--panel);border-right:1px solid var(--line);max-height:calc(100dvh - 77px);overflow:auto;scrollbar-width:thin}h2{font-size:12px;margin:0 0 18px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mint)}.parameter{margin-bottom:22px}.parameter>label{display:flex;justify-content:space-between;align-items:center;font-size:12px;gap:10px;margin-bottom:10px}output{font-variant-numeric:tabular-nums;color:#fff}input[type=range]{width:100%;margin:0}input[type=number]{width:60px;background:#192535;border:1px solid var(--line);border-radius:5px;color:white;padding:5px}select{width:100%;padding:9px;background:#192535;color:var(--text);border:1px solid var(--line);border-radius:6px}.presets{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap}.presets button{padding:6px 8px;font-size:11px}.presets button[aria-pressed=true]{border-color:var(--mint);color:var(--mint)}.hint{font-size:11px;color:var(--muted);line-height:1.6;margin:8px 0 0}.check{display:flex;align-items:center;gap:8px;min-height:32px;font-size:12px;color:#c6d2e2}.check input{margin:0}hr{border:0;border-top:1px solid var(--line);margin:22px 0}.action-row{display:flex;gap:8px;margin-top:15px}.action-row button{flex:1;font-size:12px}.scene-area{min-width:0;padding:20px;display:flex;flex-direction:column;gap:16px}.intro{display:flex;justify-content:space-between;align-items:center;gap:12px}.eyebrow{font-size:10px;letter-spacing:.13em;color:var(--muted)}.intro h2{text-transform:none;letter-spacing:0;color:var(--text);font-size:20px;font-weight:450;margin:7px 0 0}.status{color:var(--mint);font-size:11px;text-align:right}.views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;flex:1;min-height:780px}.view{border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:linear-gradient(#101a28,#0b1019);position:relative}.view-head{padding:16px 16px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #26334480}.view h3{font-size:13px;font-weight:500;margin:0 0 5px}.view small{font-size:10px;color:var(--muted)}.view-number{color:var(--mint);font:11px ui-monospace,monospace}.canvas-wrap{flex:1;position:relative;min-height:320px}canvas{display:block;width:100%;height:100%;position:absolute;inset:0;touch-action:none;cursor:grab}canvas:active{cursor:grabbing}.view-foot{padding:10px 14px 14px;font-size:10px;line-height:1.6;color:var(--muted)}.tools{position:absolute;bottom:12px;right:12px;display:flex;gap:4px}.tools button{background:#142131e8;padding:4px 8px;min-width:30px;font-size:12px}.telemetry{display:flex;gap:8px;flex-wrap:wrap}.metric{background:var(--panel);border:1px solid var(--line);padding:9px 12px;border-radius:7px;font:11px ui-monospace,monospace;color:var(--muted)}.metric b{font-weight:400;color:var(--mint)}.instructions{display:flex;align-items:flex-start;gap:14px;justify-content:space-between;font-size:11px;line-height:1.7;color:var(--muted)}kbd{font:11px ui-monospace,monospace;color:#e5bc7e}.walk-pad{display:grid;grid-template-columns:repeat(3,32px);gap:4px;flex-shrink:0}.walk-pad button{padding:5px;touch-action:none;user-select:none}.walk-pad button:first-child{grid-column:2}.walk-pad button:nth-child(2){grid-column:1}.explanation{border:1px solid var(--line);border-radius:8px;font-size:11px;line-height:1.7;color:var(--muted);padding:11px 14px}summary{cursor:pointer;color:#c4d4e8}.explanation p{margin:10px 0 0}.error{padding:15px;border:1px solid #b26a7b;background:#331d2a;border-radius:8px;font-size:12px;line-height:1.6}#walk-status{color:#edc785}.view:fullscreen{background:var(--bg)}
+@media(min-width:1600px){.scene-area{padding:26px}.views{gap:18px}}@media(max-width:1150px){main{grid-template-columns:225px minmax(0,1fr)}aside{padding:20px 15px}.scene-area{padding:14px;gap:12px}.views{grid-template-columns:repeat(2,minmax(0,1fr));min-height:700px}.view:last-child{min-height:360px}.canvas-wrap{min-height:270px}aside{max-height:none}.view-foot{min-height:46px}}@media(max-width:700px){header{padding:14px 16px}h1{font-size:14px}.live{display:none}main{display:flex;flex-direction:column}.scene-area{order:0}aside{order:1;border-top:1px solid var(--line);border-right:0;padding:22px}.views{grid-template-columns:1fr}.view:last-child{grid-column:auto}.view{min-height:390px}.canvas-wrap{min-height:290px}.intro h2{font-size:17px}.telemetry{gap:5px}.metric{font-size:10px;padding:8px}.instructions{gap:8px}.header-actions button{font-size:11px}aside .parameter{max-width:600px}.status{max-width:130px}.scene-area{padding:12px}.view-foot{min-height:0}.presets button{min-width:38px;min-height:38px}}@media(pointer:coarse){button{min-height:38px}input[type=range]{height:30px}.check{min-height:40px}.walk-pad{grid-template-columns:repeat(3,40px)}}
+
+.view-actions{display:flex;align-items:center;gap:10px}.focus-view{font-size:11px;padding:6px 9px;white-space:nowrap}.view-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.view-toolbar button{font-size:12px}.preview-select{display:none}.views.focused{display:block;position:relative;flex:1;min-height:490px;height:calc(100dvh - 305px)}.views.focused .view.is-primary{position:absolute;inset:0;min-height:0}.views.focused .view.is-primary .canvas-wrap{min-height:0}.views.focused .view.is-preview{position:absolute;z-index:2;top:74px;right:14px;width:170px;height:154px;min-height:0;background:#101a28;box-shadow:0 8px 24px #0006;border-color:#42576e}.views.focused .view.is-preview.preview-second{top:240px}.views.focused .view.is-preview .view-head{padding:9px 11px;border-bottom:1px solid #26334480;min-height:35px}.views.focused .view.is-preview h3{font-size:11px;margin:0}.views.focused .view.is-preview small,.views.focused .view.is-preview .view-actions,.views.focused .view.is-preview .view-foot,.views.focused .view.is-preview .tools{display:none}.views.focused .view.is-preview .canvas-wrap{min-height:0}.views.focused .view.is-preview canvas{pointer-events:none}.views.focused .view.is-preview .preview-select{display:block;position:absolute;inset:0;z-index:3;border:0;border-radius:11px;background:transparent;padding:0;cursor:pointer}.views.focused .view.is-preview .preview-select:hover{box-shadow:inset 0 0 0 2px var(--mint)}.views.focused.previews-hidden .view.is-preview{display:none}.views.focused .view.is-primary .focus-view{display:none}
+@media(max-width:900px){.view-actions{gap:5px}.view-number{display:none}.focus-view{font-size:10px;padding:6px}.views.focused .view.is-preview{width:140px;height:128px;right:10px}.views.focused .view.is-preview.preview-second{top:214px}}
+@media(max-width:700px){.view-toolbar{gap:6px}.view-toolbar button{font-size:11px}.views.focused{flex:none;min-height:540px;height:72dvh}.views.focused .view.is-preview{top:auto;bottom:58px;right:12px;width:calc((100% - 36px)/2);max-width:150px;height:118px}.views.focused .view.is-preview.preview-first{left:12px;right:auto}.views.focused .view.is-preview.preview-second{top:auto}.views.focused .view.is-primary .view-head{padding:14px}.views.focused .view.is-primary .canvas-wrap{margin-bottom:118px}.views.focused.previews-hidden .view.is-primary .canvas-wrap{margin-bottom:0}}
+
+.pov-reticle{position:absolute;left:50%;top:50%;width:13px;height:13px;transform:translate(-50%,-50%);pointer-events:none;opacity:.65}.pov-reticle:before,.pov-reticle:after{content:"";position:absolute;background:#c0eadc;box-shadow:0 0 3px #000}.pov-reticle:before{left:6px;top:0;width:1px;height:13px}.pov-reticle:after{left:0;top:6px;width:13px;height:1px}.pov-label{position:absolute;top:12px;left:14px;color:#a5c8cb;font-size:10px;pointer-events:none;background:#0b101999;padding:5px 7px;border-radius:4px}.views.focused .view.is-preview,.views.focused .view.is-preview.preview-second{height:112px;top:calc(68px + var(--preview-order)*120px)}.views.focused .view.is-preview .pov-label,.views.focused .view.is-preview .pov-reticle{display:none}
+@media(max-width:900px){.views.focused .view.is-preview,.views.focused .view.is-preview.preview-second{height:112px;top:calc(68px + var(--preview-order)*122px)}}
+@media(max-width:700px){.views.focused .view.is-preview,.views.focused .view.is-preview.preview-first,.views.focused .view.is-preview.preview-second{top:auto;bottom:58px;right:auto;left:calc(10px + var(--preview-order)*((100% - 20px)/3));width:calc((100% - 38px)/3);max-width:none;height:98px}.views.focused .view.is-preview .view-head{padding:8px 5px}.views.focused .view.is-preview h3{font-size:9px}.views.focused .view.is-primary .canvas-wrap{margin-bottom:100px}.header-actions{gap:6px}}
+
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}.presentation-mode{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:7px;padding:7px 10px;margin:0;font-size:12px}.presentation-mode label{display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}.presentation-mode input{margin:0}#shot-presets{margin:0}#shot-presets button{font-size:11px}
+body.clean-view{overflow:hidden;background:var(--bg)}body.clean-view>header,body.clean-view aside,body.clean-view .intro,body.clean-view .view-toolbar,body.clean-view .telemetry,body.clean-view .instructions,body.clean-view .explanation{display:none}body.clean-view main{display:block;min-height:100dvh}body.clean-view .scene-area{position:fixed;inset:0;padding:0;display:block}body.clean-view .views.focused{position:absolute;inset:0;height:100%;min-height:0;margin:0}body.clean-view .views.focused .view.is-primary{border:0;border-radius:0;background:var(--bg)}body.clean-view .view.is-primary .view-head,body.clean-view .view.is-primary .view-foot,body.clean-view .view.is-primary .tools,body.clean-view .view.is-primary .pov-label,body.clean-view .view.is-primary .pov-reticle{display:none}body.clean-view .views.focused .view.is-primary .canvas-wrap{margin:0;min-height:0}body.clean-view .views.focused .view.is-preview,body.clean-view .views.focused .view.is-preview.preview-first,body.clean-view .views.focused .view.is-preview.preview-second{top:calc(16px + var(--preview-order)*124px);right:16px;bottom:auto;left:auto;width:170px;height:112px}body.clean-view canvas{cursor:none}body.clean-view .error{position:fixed;top:16px;left:16px;z-index:20;max-width:500px}
+@media(max-width:700px){body.clean-view .views.focused .view.is-preview,body.clean-view .views.focused .view.is-preview.preview-first,body.clean-view .views.focused .view.is-preview.preview-second{top:auto;bottom:10px;right:auto;left:calc(10px + var(--preview-order)*((100% - 20px)/3));width:calc((100% - 38px)/3);height:98px}.presentation-mode{font-size:11px;min-height:38px}}
+
+/* Four equal, live quadrants. The canvases occupy the complete viewport;
+   captions and the exit control float above them without reserving space. */
+#quad-exit{display:none}header,.header-actions{flex-wrap:wrap}
+body.quad-view{overflow:hidden;background:var(--bg)}
+body.quad-view>header,body.quad-view aside,body.quad-view .intro,body.quad-view .view-toolbar,body.quad-view .telemetry,body.quad-view .instructions,body.quad-view .explanation{display:none}
+body.quad-view main{display:block;min-height:100dvh}
+body.quad-view .scene-area{position:fixed;inset:0;padding:0;display:block}
+body.quad-view .views{position:absolute;inset:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:0;min-height:0;height:100%;width:100%;margin:0}
+body.quad-view .views .view{position:relative;inset:auto;min-height:0;min-width:0;height:100%;width:100%;border:0;border-radius:0;grid-column:auto;background:var(--bg)}
+body.quad-view .views .canvas-wrap{min-height:0;height:100%;margin:0;flex:1}
+body.quad-view .views canvas{outline:none}
+body.quad-view .view-head{position:absolute;top:9px;left:12px;z-index:2;padding:4px 7px;border:0;pointer-events:none;background:#0b101980;border-radius:4px}
+body.quad-view .view-head h3{font-size:11px;margin:0;color:#b8c6d4;font-weight:400}
+body.quad-view .view small,body.quad-view .view-actions,body.quad-view .view-foot,body.quad-view .tools,body.quad-view .pov-label,body.quad-view .pov-reticle,body.quad-view .preview-select{display:none}
+body.quad-view .views:before,body.quad-view .views:after{content:"";position:absolute;z-index:3;background:#283445;pointer-events:none}
+body.quad-view .views:before{left:50%;top:0;bottom:0;width:1px}
+body.quad-view .views:after{top:50%;left:0;right:0;height:1px}
+body.quad-view #quad-exit{display:block;position:fixed;z-index:10;right:12px;bottom:10px;padding:6px 9px;font-size:11px;color:#b8c6d4;background:#101a28bd;opacity:.65}
+body.quad-view #quad-exit:hover,body.quad-view #quad-exit:focus-visible{opacity:1}
+@media(max-width:700px){body.quad-view .view-head{top:6px;left:6px;padding:3px 5px}body.quad-view .view-head h3{font-size:10px}body.quad-view #quad-exit{right:7px;bottom:7px}}
+
+
+/* Each corner contains one projection: active nappe large, other nappe small. */
+.map-secondary{display:none}
+body.one-sheet-maps .views:not(.focused) .view[data-panel="1"]{grid-column:1;grid-row:1}
+body.one-sheet-maps .views:not(.focused) .view[data-panel="0"]{grid-column:2;grid-row:1}
+body.one-sheet-maps .views:not(.focused) .view[data-panel="2"]{grid-column:1;grid-row:2}
+body.one-sheet-maps .views:not(.focused) .view[data-panel="3"]{grid-column:2;grid-row:2}
+body.one-sheet-maps .view[data-panel="0"] .canvas-wrap>canvas,body.one-sheet-maps .view[data-panel="1"] .canvas-wrap>canvas{width:74%;right:auto}
+body.one-sheet-maps .map-secondary{display:block;position:absolute;right:8px;bottom:8px;width:26%;max-width:160px;aspect-ratio:1;background:#0b1019;border:1px solid #42576e;border-radius:6px;overflow:hidden;pointer-events:none;z-index:1}
+body.one-sheet-maps .map-secondary h4{position:absolute;top:4px;left:5px;right:5px;margin:0;font-size:9px;line-height:12px;font-weight:400;color:#b8c6d4}
+body.one-sheet-maps .map-secondary canvas{inset:22px 0 0;width:100%;height:calc(100% - 22px);cursor:default}
+body.one-sheet-maps .views.focused.map-corners .view.is-preview[data-panel="1"],body.one-sheet-maps .views.focused.map-corners .view.is-preview[data-panel="0"]{top:12px;bottom:auto;width:clamp(190px,23vw,280px);height:clamp(165px,20vw,244px);max-width:none}
+body.one-sheet-maps .views.focused.map-corners .view.is-preview[data-panel="1"]{left:12px;right:auto}
+body.one-sheet-maps .views.focused.map-corners .view.is-preview[data-panel="0"]{right:12px;left:auto}
+body.one-sheet-maps .views.focused.map-corners .view.is-preview[data-panel="2"],body.one-sheet-maps .views.focused.map-corners .view.is-preview[data-panel="3"]{top:auto;bottom:12px;right:12px;left:auto;width:170px;height:112px}
+@media(max-width:700px){
+ body.one-sheet-maps .views:not(.focused) .view[data-panel]{grid-column:1;grid-row:auto}
+ body.one-sheet-maps .views:not(.focused) .view[data-panel="1"]{order:-2}
+ body.one-sheet-maps .views:not(.focused) .view[data-panel="0"]{order:-1}
+ body.one-sheet-maps.quad-view .views:not(.focused) .view[data-panel="1"]{grid-column:1;grid-row:1}
+ body.one-sheet-maps.quad-view .views:not(.focused) .view[data-panel="0"]{grid-column:2;grid-row:1}
+ body.one-sheet-maps.quad-view .views:not(.focused) .view[data-panel="2"]{grid-column:1;grid-row:2}
+ body.one-sheet-maps.quad-view .views:not(.focused) .view[data-panel="3"]{grid-column:2;grid-row:2}
+ body.one-sheet-maps .views.focused.map-corners .view.is-preview[data-panel="1"],body.one-sheet-maps .views.focused.map-corners .view.is-preview[data-panel="0"]{top:10px;bottom:auto;width:calc((100% - 36px)/2);height:142px}
+ body.one-sheet-maps .views.focused.map-corners .view.is-primary .canvas-wrap{margin-bottom:0}
+ body.one-sheet-maps .map-secondary h4{font-size:8px}
+}
+
+</style></head><body>
+<header><div><h1>APOLONIUSZ <span style="color:var(--mint)">× SIERPIŃSKI</span></h1><div class="sub">Koliste upakowanie · trójkątne rozety · cztery widoki · offline</div></div><div class="header-actions"><span class="live" id="engine">WebGL · offline</span><button id="quad-mode" type="button" aria-pressed="false" title="Cztery równe widoki na całym ekranie · F">FULL SIZE · 4 widoki</button><button id="open-pov" type="button">POV ↗</button><button id="fullscreen">Pełny ekran</button></div></header>
+<main><aside aria-label="Parametry kalejdoskopu"><h2>Koła i trójkąty</h2><p class="hint" style="margin:-8px 0 20px">Styczne koła wyznaczają układ. Ich wnętrza tworzą rozety z trójkątów Sierpińskiego.</p>
+<div class="parameter"><label for="geometry">Powierzchnia 3D</label><select id="geometry"><option value="one-sheet" selected>Jednopowłokowa · góra / dół</option><option value="hyperboloid">Dwupowłokowa · odniesienie 001</option></select><p class="hint">G przełącza powierzchnię także w FULL SIZE. Hiperboloida jednopowłokowa: góra symetryczna, dół asymetryczny; ciągła talia w Z = 0 i ta sama reguła Sierpińskiego.</p></div>
+<div class="parameter" id="cone-parts" hidden><label class="check"><input id="show-upper" type="checkbox" checked>Góra · symetryczna</label><label class="check"><input id="show-lower" type="checkbox" checked>Dół · asymetryczny</label></div>
+<div class="parameter" id="hyper-pattern-control"><label for="hyper-pattern">Apoloniusz na hiperboloidzie</label><select id="hyper-pattern"><option value="symmetric">Symetryczny</option><option value="asymmetric">Asymetryczny</option></select><p class="hint">P przełącza wzór na hiperboloidzie, także w FULL SIZE.</p></div>
+<div class="parameter" id="cone-seed-control" hidden><label for="cone-seed">Proporcje układu asymetrycznego <output id="cone-seed-value">32 / 68</output></label><input id="cone-seed" type="range" min="22" max="48" value="32"><p class="hint">Proporcja dwóch stycznych kół początkowych. Zmienia upakowanie, zachowując regułę fraktala.</p></div>
+<div class="parameter"><label for="packing">Generacje upakowania <output id="packing-value">4</output></label><input id="packing" type="range" min="0" max="6" value="4"><p class="hint">Kolejne generacje wypełniają szczeliny między stycznymi okręgami. Dla jednej powłoki środkowy okrąg wyznacza otwór talii.</p></div>
+<div class="parameter"><label for="sectors">Trójkąty w rozecie n <input type="number" id="sectors-number" min="3" max="24" value="12" aria-label="Dokładna liczba sektorów"></label><input id="sectors" type="range" min="3" max="24" value="12"><div class="presets" id="presets"><button data-n="3">3</button><button data-n="6">6</button><button data-n="8">8</button><button data-n="12">12</button><button data-n="24">24</button></div><p class="hint" id="shape-note"></p></div>
+<div class="parameter"><label for="depth">Podziały Sierpińskiego <output id="depth-value">4</output></label><input id="depth" type="range" min="0" max="6" value="4"><p class="hint" id="depth-note"></p></div>
+<div class="parameter"><label for="twist">Obrót rozet <output id="twist-value">0°</output></label><input id="twist" type="range" min="-60" max="60" value="0"></div>
+<div class="parameter"><label for="scale">Wypełnienie koła <output id="scale-value">98%</output></label><input id="scale" type="range" min="80" max="100" value="98"></div>
+<div class="parameter"><label for="extent">Zasięg powierzchni R <output id="extent-value">2,2</output></label><input id="extent" type="range" min="0.6" max="6" step="0.1" value="2.2"><p class="hint">Zakres 0,6–6,0. Talia ma promień 1; krańce znajdują się na wysokościach ±sinh(R).</p></div>
+<div class="parameter"><label for="palette">Paleta</label><select id="palette"><option value="mineral">Nefryt / bursztyn</option><option value="neon">Neon</option><option value="warm">Miedź / koral</option><option value="mono">Monochrom</option></select></div>
+<label class="check"><input id="contours" type="checkbox" checked>Kontury wcześniejszych iteracji</label><label class="check"><input id="circle-guides" type="checkbox">Okręgi konstrukcyjne</label><label class="check"><input id="outline" type="checkbox" checked>Okrąg zewnętrzny</label><label class="check"><input id="axes" type="checkbox"><span id="axes-label">Osie upakowania D₃</span></label><label class="check"><input id="grid" type="checkbox">Siatki współrzędnych</label><label class="check"><input id="surface" type="checkbox" checked><span id="surface-label">Powierzchnia hiperboloidy</span></label>
+<hr><h2>Ujęcie pod wideo</h2><div class="presets" id="shot-presets" role="group" aria-label="Ustawienia głębi ujęcia"><button type="button" data-shot="subtle">Przestrzeń</button><button type="button" data-shot="deep">Głębia</button><button type="button" data-shot="monument">Monumentalnie</button></div><p class="hint">Gotowe ustawienia promienia, obiektywu i widoczności. Zachowują wzór oraz pozycję obserwatora.</p><div class="parameter" style="margin-top:18px"><label for="pov-fov">Kąt widzenia POV <output id="pov-fov-value">75°</output></label><input id="pov-fov" type="range" min="35" max="115" step="1" value="75"></div><div class="parameter"><label for="sight">Widoczność w głąb POV <output id="sight-value">8,0</output></label><input id="sight" type="range" min="3" max="14" step="0.5" value="8"><p class="hint">Większy zasięg odsłania dalsze części wzoru. Mniejszy daje silniejszą mgłę i oddziela plany.</p></div>
+<hr><h2>Perspektywa POV</h2><div class="parameter"><label for="eye-height">Wysokość oczu <output id="eye-height-value">0,28</output></label><input id="eye-height" type="range" min="0.06" max="0.65" step="0.01" value="0.28"><p class="hint">POV zawsze podąża za punktem i kierunkiem ruchu. Przeciąganie w poziomie skręca obserwatora, w pionie pochyla spojrzenie.</p></div>
+<hr><h2>Obserwator</h2><label class="check"><input id="marker" type="checkbox" checked>Znacznik pozycji i kierunku</label><label class="check"><input id="follow" type="checkbox" checked>Środek dysku podąża za Tobą</label><label class="check"><input id="trail" type="checkbox" checked>Ślad ruchu</label><p class="hint">Na jednej powłoce obserwator porusza się po ciągłej powierzchni i może przejść przez talię. W/S: ruch; A/D: skręt. POV pokazuje wnętrze hiperboloidy.</p><div class="action-row"><button id="reset">Reset ruchu · R</button><button id="defaults">Domyślne</button></div>
+</aside>
+<section class="scene-area" aria-label="Porównanie geometrii i perspektywy obserwatora"><div class="intro"><div><span class="eyebrow">LABORATORIUM GEOMETRII</span><h2 id="pattern-title">Apoloniusz × Sierpiński</h2></div><div class="status" id="status" role="status">Przygotowuję geometrię…</div></div><div class="error" id="error" role="alert" hidden></div>
+<div class="view-toolbar" id="view-toolbar" hidden><button id="overview" type="button">← Wszystkie widoki <span class="hint">· Esc</span></button><button id="toggle-previews" type="button" aria-pressed="true">Ukryj podglądy</button><fieldset id="presentation-mode" class="presentation-mode"><legend class="sr-only">Sposób wyświetlania powiększonego widoku</legend><label><input type="radio" name="presentation" id="interface-mode" value="interface" checked>Interfejs</label><label><input type="radio" name="presentation" id="clean-mode" value="clean">Czysty widok</label></fieldset><span class="hint" style="margin:0">Esc przywraca interfejs.</span><span class="hint" style="margin:0">Kliknij podgląd, aby zmienić widok główny.</span></div>
+<div class="views" id="views">
+<section class="view" data-panel="0"><button class="preview-select" type="button" aria-label="Pokaż jako główny: Kartezjański"></button><div class="view-head"><div><h3 id="source-title">Kartezjański</h3><small id="source-note">Wzór źródłowy · współrzędne (x, y)</small></div><div class="view-actions"><span class="view-number">01 / ℝ²</span><button class="focus-view" type="button" aria-label="Powiększ widok: Kartezjański" aria-expanded="false">Powiększ ↗</button></div></div><div class="canvas-wrap"><canvas id="cartesian" tabindex="0" aria-label="Kartezjański widok kalejdoskopu; przeciągnij aby przesunąć, kółko aby przybliżyć"></canvas><div class="map-secondary"><h4 id="cartesian-other-title">Dół · podgląd</h4><canvas id="cartesian-other" tabindex="-1" aria-label="Druga połowa wzoru"></canvas></div><div class="tools" data-view="0"><button data-action="out" aria-label="Oddal widok kartezjański">−</button><button data-action="in" aria-label="Przybliż widok kartezjański">+</button><button data-action="fit">Dopasuj</button></div></div><div class="view-foot">Koliste rozety z prostych trójkątów · przeciągnij: przesuń · kółko: zoom</div></section>
+<section class="view" data-panel="1"><button class="preview-select" type="button" aria-label="Pokaż jako główny: Dysk Poincarégo"></button><div class="view-head"><div><h3 id="disk-title">Dysk Poincarégo</h3><small id="disk-note">Geodezyjne · izometrie Möbiusa</small></div><div class="view-actions"><span class="view-number">02 / H²</span><button class="focus-view" type="button" aria-label="Powiększ widok: Dysk Poincarégo" aria-expanded="false">Powiększ ↗</button></div></div><div class="canvas-wrap"><canvas id="poincare" tabindex="0" aria-label="Dysk Poincarégo; przeciągnij aby obrócić, W A S D aby poruszać obserwatorem"></canvas><div class="map-secondary"><h4 id="poincare-other-title">Dół · podgląd</h4><canvas id="poincare-other" tabindex="-1" aria-label="Druga połowa wzoru"></canvas></div><div class="tools" data-view="1"><button data-action="out" aria-label="Oddal dysk">−</button><button data-action="in" aria-label="Przybliż dysk">+</button><button data-action="fit">Dopasuj</button></div></div><div class="view-foot">Brzeg jest w nieskończoności · przeciągnij: obrót · kółko: zoom</div></section>
+<section class="view" data-panel="2"><button class="preview-select" type="button" aria-label="Pokaż jako główny: Hiperboloida"></button><div class="view-head"><div><h3 id="model-title">Hiperboloida</h3><small id="model-equation">X² + Y² − Z² = −1 · Z &gt; 0</small></div><div class="view-actions"><span class="view-number" id="model-space">03 / H² ⊂ ℝ²˒¹</span><button class="focus-view" type="button" aria-label="Powiększ widok: Hiperboloida" aria-expanded="false">Powiększ ↗</button></div></div><div class="canvas-wrap"><canvas id="hyperboloid" tabindex="0" aria-label="Trójwymiarowy widok hiperboloidy; przeciągnij aby obrócić kamerę, kółko aby przybliżyć"></canvas><div class="tools" data-view="2"><button data-action="out" aria-label="Oddal hiperboloidę">−</button><button data-action="in" aria-label="Przybliż hiperboloidę">+</button><button data-action="fit">Dopasuj</button></div></div><div class="view-foot" id="model-foot">Ten sam wzór na powierzchni H² · przeciągnij: orbita · kółko: zoom</div></section>
+<section class="view" data-panel="3"><button class="preview-select" type="button" aria-label="Pokaż jako główny: POV obserwatora"></button><div class="view-head"><div><h3>POV obserwatora</h3><small>Kamera w poruszającym się punkcie</small></div><div class="view-actions"><span class="view-number">04 / POV</span><button class="focus-view" type="button" aria-label="Powiększ widok: POV obserwatora" aria-expanded="false">Powiększ ↗</button></div></div><div class="canvas-wrap"><canvas id="pov" tabindex="0" aria-label="Perspektywa obserwatora na hiperboloidzie; W S ruch, A D skręt, przeciąganie rozglądanie"></canvas><span class="pov-label">W / S · ruch &nbsp; A / D · skręt</span><span class="pov-reticle" aria-hidden="true"></span><div class="tools" data-view="3"><button data-action="out" aria-label="Szersze pole widzenia POV">−</button><button data-action="in" aria-label="Węższe pole widzenia POV">+</button><button data-action="fit">Reset spojrzenia</button></div></div><div class="view-foot">Oczy nad wybraną powierzchnią · przeciągnij: rozglądaj się · kółko: pole widzenia</div></section>
+</div>
+<div class="telemetry" aria-label="Pozycja obserwatora"><span class="metric"><span id="distance-label">d<sub>H</sub></span> = <b id="distance">0,000</b></span><span class="metric"><span id="position-label">dysk (u, v)</span> = <b id="position">0,000; 0,000</b></span><span class="metric">(X, Y, Z) = <b id="lift">0,00; 0,00; 1,00</b></span><span class="metric">kierunek = <b id="heading">90°</b></span></div>
+<div class="instructions"><div><kbd>F</kbd> FULL SIZE · <kbd>G</kbd> jedna / dwie powłoki · <kbd>P</kbd> wzór hiperboloidy · <kbd>Esc</kbd> powrót<br><kbd>W / S</kbd> przód / tył · <kbd>A / D</kbd> skręt · <kbd>Shift</kbd> szybciej · <kbd>R</kbd> reset ruchu<br><span style="color:#f5e6c2">△</span> pozycja i kierunek · <span style="color:#ffda75">—</span> ślad · <span id="walk-status">Kliknij dowolny widok, aby rozpocząć.</span></div><div class="walk-pad" aria-label="Przyciski chodzenia"><button data-key="w" aria-label="Idź naprzód">W</button><button data-key="a" aria-label="Skręć w lewo">A</button><button data-key="s" aria-label="Idź wstecz">S</button><button data-key="d" aria-label="Skręć w prawo">D</button></div></div>
+<details class="explanation"><summary>Jedna powłoka i przejście w talii — jak powstaje wzór?</summary><p>Wersja 003: X² + Y² − Z² = 1. Parametryzacja (X, Y, Z) = (cosh(u) cos(θ), cosh(u) sin(θ), sinh(u)), −R ≤ u ≤ R. Talia u = 0 ma promień 1 i gładko łączy obie połowy. Góra otrzymuje symetryczne upakowanie Apoloniusza, dół asymetryczne; przejście następuje przy Z = 0. Geometria nie ma wierzchołka ani szczeliny.</p><p>Każda połowa wymaga dziedziny pierścieniowej. Góra zachowuje dotychczasowy centralny otwór. Dół korzysta z tych samych kół, proporcji, położeń i generacji co asymetryczny wzór w wersji 002, w tym dużego koła o promieniu 0,68 przy ustawieniu 32 / 68. Jedno małe wewnętrzne koło pierwszej generacji rezerwujemy jako otwór talii. Pozostałe okręgi oraz rozety Sierpińskiego zachowują swoje współrzędne źródłowe. Promienie wyprowadzamy ze środka tego otworu do brzegu zewnętrznego; parametr |u| biegnie od 0 w talii do R na brzegu. Przesunięty otwór odwzorowuje się na całą talię, a wszystkie rozety pozostają pełne. Podział trójkątów nadal używa trzech kopii w skali 1/2 i pustego środka.</p><p>To odwzorowanie fraktala na hiperboloidę jednopowłokową w przestrzeni euklidesowej, nie model płaszczyzny H². Siatka jest adaptacyjnie dzielona według kąta oraz parametru u, aby dokładnie odwzorować łuki przy talii. POV znajduje się nad wewnętrzną stroną powierzchni. W/S porusza po powierzchni, A/D zmienia kierunek; można przejść z górnego wzoru przez talię do dolnego. R przywraca pozycję w talii.</p><p>G przełącza tę powierzchnię i odniesienie do dwupowłokowej hiperboloidy z wersji 001; P przełącza wzór wyłącznie w modelu odniesienia. F pokazuje cztery widoki FULL SIZE, Esc przywraca interfejs. Koła pozostają dokładnie styczne w dziedzinie źródłowej; ich obrazy na powierzchni są krzywymi. Wersje 001 i 002 są osobnymi plikami.</p></details>
+</section></main><button id="quad-exit" type="button" aria-label="Zamknij FULL SIZE i wróć do interfejsu">← Interfejs · Esc</button>
+<script>
+/* Apollonian circle packing filled with finite Sierpiński rosettes.
+   Descartes reflection acts on signed curvature and curvature × center.
+   Geometry stays in source coordinates; all four views share the same mesh. */
+(function(scope){
+ 'use strict';
+ const PI=Math.PI,TAU=2*PI;
+ function packing(generations,variant="hyperboloid",seed=.32){
+  const r=Math.sqrt(3)/(2+Math.sqrt(3));
+  const initial=[{k:-1,x:0,y:0,r:1,generation:-1}];
+  for(let i=0;i<3;i++){const angle=-PI/2+i*TAU/3;initial.push({k:1/r,x:(1-r)*Math.cos(angle),y:(1-r)*Math.sin(angle),r,generation:0});}
+  if(variant==='cone'){
+   // Two internally tangent circles on the diameter, plus their upper
+   // Descartes circle. The unequal radii define a genuinely new seed.
+   const a=Math.max(.22,Math.min(.48,seed)),b=1-a,c=1/(1/a+1/b-1);
+   const x=-1+c*(1+a)/(1-a),y=Math.sqrt(Math.max(0,(1-c)**2-x*x));
+   initial.splice(1,3,{k:1/a,x:a-1,y:0,r:a,generation:0},{k:1/b,x:a,y:0,r:b,generation:0},{k:1/c,x,y,r:c,generation:0});
+  }
+  const circles=initial.slice(1),seen=new Set(circles.map(key));
+  function key(c){return [c.x,c.y,c.r].map(v=>v.toFixed(9)).join(',');}
+  function visit(quad,previous,generation){
+   if(generation>generations)return;
+   for(let j=0;j<4;j++){
+    if(j===previous)continue;
+    const old=quad[j];let k=-old.k,bx=-old.k*old.x,by=-old.k*old.y;
+    for(let i=0;i<4;i++)if(i!==j){const c=quad[i];k+=2*c.k;bx+=2*c.k*c.x;by+=2*c.k*c.y;}
+    if(k<=0)continue;
+    const c={k,x:bx/k,y:by/k,r:1/k,generation};
+    // Reject the enclosing circle and terminate branches below visible detail.
+    if(c.r<.0015||Math.hypot(c.x,c.y)+c.r>1+1e-8)continue;
+    const id=key(c);if(seen.has(id))continue;seen.add(id);circles.push(c);
+    const next=quad.slice();next[j]=c;visit(next,j,generation+1);
+   }
+  }
+  if(generations>0)visit(initial,-1,1);
+  return circles.sort((a,b)=>b.r-a.r||a.x-b.x||a.y-b.y);
+ }
+ function annularPacking(generations,variant='hyperboloid',seed=.32){
+  const base=packing(2,variant,seed);
+  const candidates=base.filter(c=>Math.hypot(c.x,c.y)+c.r<.96);
+  if(variant==='cone'){
+   // Preserve the exact asymmetric circles and generations from version 002.
+   // Reserve a small gap circle for the waist; do not recenter the packing.
+   const hole=candidates.filter(c=>c.generation===1).sort((a,b)=>b.r-a.r)[0];
+   if(!hole)throw Error('Brak wewnętrznego koła dla talii dolnego wzoru.');
+   const circles=packing(generations,variant,seed).filter(c=>Math.hypot(c.x-hole.x,c.y-hole.y)>1e-8||Math.abs(c.r-hole.r)>1e-8);
+   return {circles,innerRadius:hole.r,innerCenter:[hole.x,hole.y]};
+  }
+  const hole=variant==='cone'
+   ?candidates.filter(c=>{const l=Math.hypot(c.x,c.y);return c.generation===2&&Math.tanh((Math.atanh(l+c.r)-Math.atanh(l-c.r))/2)<.05;}).sort((a,b)=>b.r-a.r)[0]
+   :candidates.sort((a,b)=>Math.hypot(a.x,a.y)-Math.hypot(b.x,b.y))[0];
+  if(!hole)throw Error('Brak wewnętrznego koła dla dziedziny pierścieniowej.');
+  const length=Math.hypot(hole.x,hole.y);
+  const ar=length<1e-12?0:Math.tanh((Math.atanh(length-hole.r)+Math.atanh(length+hole.r))/2);
+  const ax=length<1e-12?0:ar*hole.x/length,ay=length<1e-12?0:ar*hole.y/length;
+  const transform=c=>{
+   const ux=1-ax*c.x-ay*c.y,uy=ax*c.y-ay*c.x;
+   const nx=c.x-ax,ny=c.y-ay,D=ux*ux+uy*uy-(ax*ax+ay*ay)*c.r*c.r;
+   return {...c,x:(nx*ux-ny*uy+ax*c.r*c.r)/D,y:(nx*uy+ny*ux+ay*c.r*c.r)/D,r:c.r*(1-ax*ax-ay*ay)/D};
+  };
+  const innerRadius=transform(hole).r;
+  const circles=packing(generations+2,variant,seed)
+   .filter(c=>Math.hypot(c.x-hole.x,c.y-hole.y)>1e-8||Math.abs(c.r-hole.r)>1e-8)
+   .map(transform).filter(c=>c.r>=.0015)
+   .sort((a,b)=>b.r-a.r||a.x-b.x||a.y-b.y);
+  return {circles,innerRadius,innerCenter:[0,0]};
+ }
+ function generate(index,depth,options={}){
+  const sectors=options.sectors??12,generations=options.packingDepth??4;
+  if(!Number.isInteger(sectors)||sectors<3||sectors>24)throw new RangeError('Rozeta wymaga od 3 do 24 sektorów.');
+  const domain=options.annular?annularPacking(generations,options.variant,options.seed):{circles:packing(generations,options.variant,options.seed),innerRadius:0};
+  const circles=domain.circles,shapes=[],guides=[],boundary=[];
+  const rotation=(options.twist??0)*PI/180,scale=options.scaleMultiplier??.98;
+  const midpoint=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2];
+  // The maximum motif depth applies to the three largest circles. Smaller
+  // circles receive fewer divisions to keep detail proportional to their size.
+  let effectiveDepth=depth;
+  const cost=d=>circles.reduce((sum,c)=>sum+sectors*3**Math.max(0,d+Math.floor(Math.log2(c.r/circles[0].r))),0);
+  while(effectiveDepth>0&&cost(effectiveDepth)>110000)effectiveDepth--;
+  function recur(a,b,c,left,color,level=0){
+   if(left===0){shapes.push({points:[a,b,c],color,alpha:1,stroke:0});return;}
+   if(level<2)shapes.push({points:[a,b,c],color,alpha:.13,stroke:.0005});
+   const ab=midpoint(a,b),bc=midpoint(b,c),ca=midpoint(c,a);
+   recur(a,ab,ca,left-1,color,level+1);recur(ab,b,bc,left-1,color,level+1);recur(ca,bc,c,left-1,color,level+1);
+  }
+  for(const circle of circles){
+   const d=Math.max(0,effectiveDepth+Math.floor(Math.log2(circle.r/circles[0].r)));
+   const center=[circle.x,circle.y];
+   const phase=rotation-PI/2;
+   for(let j=0;j<sectors;j++){
+    const p=t=>[circle.x+circle.r*scale*Math.cos(t),circle.y+circle.r*scale*Math.sin(t)];
+    recur(center,p(phase+j*TAU/sectors),p(phase+(j+1)*TAU/sectors),d,(circle.generation+1)%5);
+   }
+   const ring=[];const steps=Math.max(24,Math.ceil(192*circle.r));
+   for(let j=0;j<steps;j++)ring.push([circle.x+circle.r*Math.cos(j*TAU/steps),circle.y+circle.r*Math.sin(j*TAU/steps)]);
+   guides.push(ring);
+  }
+  for(let j=0;j<256;j++)boundary.push([Math.cos(j*TAU/256),Math.sin(j*TAU/256)]);
+  const normalize=p=>[500+450*p[0],500+450*p[1]];
+  shapes.forEach(shape=>shape.points=shape.points.map(normalize));
+  return {shapes,guides:guides.map(ring=>ring.map(normalize)),boundary:boundary.map(normalize),origin:[500,500],radius:450,innerRadius:domain.innerRadius,innerCenter:domain.innerCenter??[0,0],circles:circles.length,packingDepth:generations,effectiveDepth,sourceCircles:circles};
+ }
+ const api={generate,packing,annularPacking,kaleidoscopeDepthLimit:()=>6};
+ if(typeof module!=='undefined'&&module.exports)module.exports=api;else scope.FractalSet=api;
+})(typeof window!=='undefined'?window:globalThis);
+</script>
+<script>
+'use strict';
+// This function runs unchanged in a Blob worker or the local-file fallback.
+function buildGeometry(task){
+ // Each nappe has its own packing and GPU buffers, built by the same recursion.
+ if(task.model==='one-sheet'&&!task.singleSheet){
+  const upper=buildGeometry({...task,singleSheet:true,variant:'hyperboloid'});
+  upper.lower=buildGeometry({...task,singleSheet:true,variant:'cone'});
+  return upper;
+ }
+ const f=FractalSet.generate(4,task.depth,{sectors:task.n,strictSymmetry:true,twist:task.twist,scaleMultiplier:task.scale/100,packingDepth:task.packing,variant:task.variant??(task.pattern==='asymmetric'?'cone':'hyperboloid'),seed:task.seed,annular:task.model==='one-sheet'});
+ const center=f.origin;let radius=0;
+ for(const s of f.shapes)for(const p of s.points)radius=Math.max(radius,Math.hypot(p[0]-center[0],p[1]-center[1]));
+ for(const p of f.boundary)radius=Math.max(radius,Math.hypot(p[0]-center[0],p[1]-center[1]));
+ const norm=p=>[(p[0]-center[0])/radius,-(p[1]-center[1])/radius];
+ const innerCenter=[f.innerCenter[0],-f.innerCenter[1]];
+ const fill=[],lines=[],boundary=[],guides=[];let leaves=0;
+ const meshExtent=Math.max(.6,Math.min(6,Number(task.extent)||2.2)),k2=Math.tanh(meshExtent)**2;
+ function edgeCost(a,b,sourceStep,hyperbolicStep){
+  if(task.model==='one-sheet'){
+   const relative=p=>[p[0]-innerCenter[0],p[1]-innerCenter[1]];
+   const local=p=>{const radius=Math.hypot(...p),dx=p[0]/radius,dy=p[1]/radius,dot=innerCenter[0]*dx+innerCenter[1]*dy;const outer=-dot+Math.sqrt(dot*dot+1-innerCenter[0]**2-innerCenter[1]**2);return (radius-f.innerRadius)/(outer-f.innerRadius);};
+   const pa=relative(a),pb=relative(b),du=meshExtent*Math.abs(local(pa)-local(pb));
+   const angle=Math.abs(Math.atan2(pa[0]*pb[1]-pa[1]*pb[0],pa[0]*pb[0]+pa[1]*pb[1]));
+   return Math.max(Math.hypot(a[0]-b[0],a[1]-b[1])/sourceStep,du/hyperbolicStep,angle/.065);
+  }
+  const aa=a[0]*a[0]+a[1]*a[1],bb=b[0]*b[0]+b[1]*b[1],ab=a[0]*b[0]+a[1]*b[1];
+  const coshDistance=(1-k2*ab)/Math.sqrt(Math.max(1e-18,(1-k2*aa)*(1-k2*bb)));
+  return Math.max(Math.hypot(a[0]-b[0],a[1]-b[1])/sourceStep,(coshDistance-1)/(Math.cosh(hyperbolicStep)-1));
+ }
+ const vertex=(out,p,color,alpha)=>out.push(p[0],p[1],color,alpha);
+ function segment(out,a,b,color,alpha,level=0){if(edgeCost(a,b,.012,.12)>1&&level<27){const m=[(a[0]+b[0])/2,(a[1]+b[1])/2];segment(out,a,m,color,alpha,level+1);segment(out,m,b,color,alpha,level+1);}else{vertex(out,a,color,alpha);vertex(out,b,color,alpha);}}
+ function triangle(a,b,c,color,alpha,level=0){
+  const ab=edgeCost(a,b,.055,.32),bc=edgeCost(b,c,.055,.32),ca=edgeCost(c,a,.055,.32);
+  if(Math.max(ab,bc,ca)>1&&level<27){if(ab>=bc&&ab>=ca){const m=[(a[0]+b[0])/2,(a[1]+b[1])/2];triangle(a,m,c,color,alpha,level+1);triangle(m,b,c,color,alpha,level+1);}else if(bc>=ca){const m=[(b[0]+c[0])/2,(b[1]+c[1])/2];triangle(a,b,m,color,alpha,level+1);triangle(a,m,c,color,alpha,level+1);}else{const m=[(c[0]+a[0])/2,(c[1]+a[1])/2];triangle(a,b,m,color,alpha,level+1);triangle(m,b,c,color,alpha,level+1);}return;}
+  vertex(fill,a,color,alpha);vertex(fill,b,color,alpha);vertex(fill,c,color,alpha);
+ }
+ for(const s of f.shapes){const p=s.points.map(norm);if(s.stroke){for(let j=0;j<p.length;j++)segment(lines,p[j],p[(j+1)%p.length],s.color,.20);}else{leaves++;for(let j=1;j<p.length-1;j++)triangle(p[0],p[j],p[j+1],s.color,s.alpha);}}
+ for(const ring of f.guides){const p=ring.map(norm);for(let j=0;j<p.length;j++)segment(guides,p[j],p[(j+1)%p.length],0,.35);}
+ const b=f.boundary.map(norm);for(let j=0;j<b.length;j++)segment(boundary,b[j],b[(j+1)%b.length],0,.65);
+ if(f.innerRadius){for(let j=0;j<256;j++){const a=j*Math.PI/128,b=(j+1)*Math.PI/128;segment(boundary,[innerCenter[0]+f.innerRadius*Math.cos(a),innerCenter[1]+f.innerRadius*Math.sin(a)],[innerCenter[0]+f.innerRadius*Math.cos(b),innerCenter[1]+f.innerRadius*Math.sin(b)],0,.8);}}
+ return {innerRadius:f.innerRadius,innerCenter,id:task.id,model:task.model,pattern:task.pattern,variant:task.variant??(task.pattern==='asymmetric'?'cone':'hyperboloid'),seed:task.seed,n:task.n,depth:task.depth,circles:f.circles,packingDepth:f.packingDepth,effectiveDepth:f.effectiveDepth,meshExtent,leaves,guides:new Float32Array(guides),fill:new Float32Array(fill),lines:new Float32Array(lines),boundary:new Float32Array(boundary)};
+}
+(function(){
+const $=id=>document.getElementById(id),clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),fmt=(v,d=2)=>v.toLocaleString('pl-PL',{minimumFractionDigits:d,maximumFractionDigits:d});
+const palettes={mineral:['#69efd7','#dca8fc','#ffbf78','#89baff','#fb91ad'],neon:['#51ffcd','#cd85ff','#ffee82','#52c9ff','#ff6faa'],warm:['#ffcaa0','#e8a282','#ffa372','#e2be9e','#ff8a9c'],mono:['#dbe5f2','#c6d5e7','#ffffff','#a7bad3','#eef3fa']};
+const state={a:[0,0],yaw:Math.PI/2,trail:[[0,0]],diskAngle:0,model:"one-sheet",one:{theta:-1.05,u:0},oneTrail:[],extent:2.2,job:0,geometry:null,dirty:true,keys:new Set(),limit:false,sight:8};
+const camera=[{zoom:1,x:0,y:0},{zoom:1},{zoom:1,azimuth:-1.05,polar:1.18},{zoom:1,pitch:-.08,height:.28,fov:75}];let views=[],worker=null,workerURL=null,buildTimer,workerWatchdog,lastTask,workerReady=false,booted=false,focusedView=null,showPreviews=true,cleanView=false,quadView=false,quadReturn=null,quadFullscreen=false;
+function mobius(z,a){const nr=z[0]+a[0],ni=z[1]+a[1],dr=1+a[0]*z[0]+a[1]*z[1],di=a[0]*z[1]-a[1]*z[0],d=dr*dr+di*di;return [(nr*dr+ni*di)/d,(ni*dr-nr*di)/d];}
+function lift(p){const r=p[0]*p[0]+p[1]*p[1],d=1-r;return [2*p[0]/d,2*p[1]/d,(1+r)/d];}
+function singlePoint(theta,u){return [Math.cosh(u)*Math.cos(theta),Math.cosh(u)*Math.sin(theta),Math.sinh(u)];}
+function oneSource(theta,u,side=u<0?-1:1){
+ const domain=side<0?state.geometry?.lower:state.geometry;
+ const inner=domain?.innerRadius??.07,hole=domain?.innerCenter??[0,0];
+ const direction=[Math.cos(theta),Math.sin(theta)],dot=hole[0]*direction[0]+hole[1]*direction[1];
+ const outer=-dot+Math.sqrt(dot*dot+1-hole[0]**2-hole[1]**2);
+ const radius=inner+(outer-inner)*Math.min(1,Math.abs(u)/state.extent);
+ const q=[hole[0]+radius*direction[0],hole[1]+radius*direction[1]],k=q.map(v=>v*Math.tanh(state.extent));
+ const factor=1/(1+Math.sqrt(Math.max(0,1-k[0]*k[0]-k[1]*k[1])));return k.map(v=>v*factor);
+}
+function modelLift(p){if(state.model==='one-sheet')return singlePoint(state.one.theta,state.one.u);return lift(p);}
+// The projection is fixed by the corner; only the displayed nappe switches.
+function flatMapSide(v){return (state.one.u<0?-1:1)*(v.secondary?-1:1);}
+let mapPanelKey='';
+function syncMapPanels(){
+ const cone=state.model==='one-sheet',side=state.one.u<0?-1:1,key=state.model+':'+side;
+ if(key===mapPanelKey)return;mapPanelKey=key;
+ document.body.classList.toggle('one-sheet-maps',cone);
+ if(!cone)return;
+ const active=side>0?'góra':'dół',other=side>0?'Dół':'Góra';
+ for(const [id,mode,title] of [['cartesian',0,'Kartezjański'],['poincare',1,'Poincarégo']]){
+  const panel=document.querySelector('[data-panel="'+mode+'"]');
+  const label=title+' · '+active+' (punkt)';
+  panel.querySelector('h3').textContent=label;
+  $(id+'-other-title').textContent=other+' · podgląd';
+  $(id).setAttribute('aria-label',title+' — '+active+' z obserwatorem');
+  $(id+'-other').setAttribute('aria-label',title+' — '+other.toLowerCase()+' bez obserwatora');
+  panel.querySelector('.preview-select').setAttribute('aria-label','Pokaż jako główny: '+label);
+  panel.querySelector('.focus-view').setAttribute('aria-label','Powiększ widok: '+label);
+ }
+ $('source-note').textContent='Współrzędne kartezjańskie · duży: aktualny wzór · mały: druga połowa';
+ $('disk-note').textContent='Rzut Poincarégo · duży: aktualny wzór · mały: druga połowa';
+}
+function syncModel(){
+ const cone=state.model==='one-sheet',asymmetric=$('hyper-pattern').value==='asymmetric',name=cone?'Hiperboloida jednopowłokowa':'Hiperboloida · odniesienie 001';
+ $('follow').closest('label').hidden=cone;$('cone-parts').hidden=!cone;$('hyper-pattern-control').hidden=cone;$('cone-seed-control').hidden=!cone&&!asymmetric;
+ $('cone-seed-value').textContent=$('cone-seed').value+' / '+(100-Number($('cone-seed').value));
+ $('distance-label').textContent=cone?'u':'dₕ';$('position-label').textContent=cone?'(θ, u)':'dysk (u, v)';$('model-title').textContent=name;$('model-space').textContent=cone?'03 / X² + Y² − Z² = 1':'03 / H² ⊂ ℝ²˒¹';
+ $('model-equation').textContent=cone?'Góra symetryczna · talia Z = 0 · dół asymetryczny':'X² + Y² − Z² = −1 · Z > 0';
+ $('model-foot').textContent=(cone?'Jedna ciągła powierzchnia · przejście wzoru w talii':(asymmetric?'Asymetryczny':'Symetryczny')+' Apoloniusz na hiperboloidzie')+' · przeciągnij: orbita · kółko: zoom';
+ $('surface-label').textContent='Powierzchnia hiperboloidy';$('axes-label').textContent=cone||asymmetric?'Osie odniesienia':'Osie upakowania D₃';
+ $('source-title').textContent=cone?'Góra · Apoloniusz symetryczny':'Kartezjański';
+ $('source-note').textContent=cone?'Górny wzór na pierścieniu · otwór = talia':'Wzór źródłowy · współrzędne (x, y)';
+ $('disk-title').textContent=cone?'Dół · Apoloniusz asymetryczny':'Dysk Poincarégo';
+ $('disk-note').textContent=cone?'Układ z 002 · proporcje i położenia kół zachowane':'Geodezyjne · izometrie Möbiusa';
+ $('pov').setAttribute('aria-label','Perspektywa obserwatora: '+name+(cone?' · przejście przez talię':'')+'; W S ruch, A D skręt, przeciąganie rozglądanie');
+ document.querySelector('.pov-label').textContent=(cone?'Wnętrze · przejście przez talię · ':'')+'W / S · ruch   A / D · skręt';
+ for(const [i,title] of [[0,$('source-title').textContent],[1,$('disk-title').textContent],[2,name]]){
+  const panel=document.querySelector('[data-panel="'+i+'"]');panel.querySelector('.preview-select').setAttribute('aria-label','Pokaż jako główny: '+title);panel.querySelector('.focus-view').setAttribute('aria-label','Powiększ widok: '+title);
+ }
+ $('hyperboloid').setAttribute('aria-label','Trójwymiarowy widok: '+name+'; przeciągnij aby obrócić kamerę, kółko aby przybliżyć');
+ $('pattern-title').textContent='Apoloniusz × Sierpiński · '+name;mapPanelKey='';syncMapPanels();
+}
+function changeModel(){state.model=$('geometry').value;camera[2].polar=state.model==='one-sheet'?1.18:1.02;syncModel();refreshAux();rebuild();state.dirty=true;}
+function uploadGeometry(v,g){for(const key of ['fill','lines','boundary','guides']){upload(v,key,g[key]);if(g.lower)upload(v,'lower-'+key,g.lower[key]);}}
+function fail(message){$('error').hidden=false;$('error').textContent=message;$('status').textContent='Błąd';}
+function receive(g){if(g.id!==state.job)return;if(g.error){fail(g.error);return;}state.geometry=g;$('depth-note').textContent='Efektywna głębokość dużych rozet: '+g.effectiveDepth+'. Małe rozety mają proporcjonalnie mniej podziałów.';$('error').hidden=true;$('status').textContent=g.lower?'Góra: '+g.circles+' rozet · dół: '+g.lower.circles+' rozet':fmt(g.circles,0)+' rozet · '+fmt(g.leaves,0)+' trójkątów źródłowych';for(const v of views)uploadGeometry(v,g);refreshAux();state.dirty=true;}
+function localBuild(task){setTimeout(()=>{if(task.id!==state.job)return;try{receive(buildGeometry(task));}catch(e){fail(e.message);}},20);}
+function fallback(){clearTimeout(workerWatchdog);if(worker){worker.terminate();worker=null;}if(workerURL){URL.revokeObjectURL(workerURL);workerURL=null;}$('engine').textContent='WebGL · obliczenia lokalne';if(lastTask)localBuild(lastTask);}
+function initWorker(){try{const generator=document.scripts[0].textContent;const code=generator+'\n'+buildGeometry.toString()+'\nself.onmessage=e=>{try{const g=buildGeometry(e.data);const transfer=[g,g.lower].filter(Boolean).flatMap(part=>["fill","lines","boundary","guides"].map(key=>part[key].buffer));self.postMessage(g,transfer);}catch(e2){self.postMessage({id:e.data.id,error:e2.message});}};self.postMessage({ready:true});';workerURL=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));worker=new Worker(workerURL);worker.onmessage=e=>{if(e.data.ready){workerReady=true;clearTimeout(workerWatchdog);URL.revokeObjectURL(workerURL);workerURL=null;return;}receive(e.data);};worker.onerror=e=>{e.preventDefault();fallback();};workerWatchdog=setTimeout(()=>{if(!workerReady)fallback();},3000);}catch{fallback();}}
+function values(){const n=Number($('sectors').value);$('sectors-number').value=n;$('depth-note').textContent='Do '+$('depth').value+' podziałów w dużych rozetach; mniej w małych. Limit 110 tys. trójkątów źródłowych.';for(const name of ['packing','depth','twist','scale','extent'])$(name+'-value').textContent=name==='extent'?fmt(Number($(name).value),1):$(name).value+(name==='twist'?'°':name==='scale'?'%':'');syncModel();$('shape-note').textContent=n===6?'6 równobocznych trójkątów Sierpińskiego w każdym kole.':n+' równoramiennych trójkątów w kole. Więcej sektorów daje bardziej kolistą obwiednię.';document.querySelectorAll('[data-n]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.n===n)));}
+function rebuild(){values();clearTimeout(buildTimer);const id=++state.job;$('status').textContent='Obliczam konstrukcję…';buildTimer=setTimeout(()=>{lastTask={id,n:+$('sectors').value,depth:+$('depth').value,twist:+$('twist').value,scale:+$('scale').value,packing:+$('packing').value,model:state.model,pattern:$('hyper-pattern').value,seed:+$('cone-seed').value/100,extent:state.extent};if(worker)worker.postMessage(lastTask);else localBuild(lastTask);},120);}
+const vertexSource=`precision highp float;precision highp int;
+attribute vec2 a_position;attribute float a_branch;attribute float a_alpha;
+uniform int u_mode;uniform int u_space;uniform bool u_cone;uniform float u_sheet;uniform float u_inner;uniform vec2 u_hole;uniform float u_extent;uniform vec2 u_observer;uniform float u_angle;uniform vec2 u_pan;uniform vec2 u_scale;uniform mat4 u_matrix;uniform vec3 u_palette[5];uniform bool u_radial;uniform bool u_solid;uniform vec4 u_color;uniform float u_pixel_ratio;
+varying lowp vec4 v_color;varying highp vec2 v_disk;varying highp float v_distance;
+float tanh(float x){float e=exp(2.0*x);return (e-1.0)/(e+1.0);}
+vec2 translate(vec2 z,vec2 a){vec2 n=z+a;vec2 d=vec2(1.0+dot(a,z),a.x*z.y-a.y*z.x);return vec2(dot(n,d),n.y*d.x-n.x*d.y)/dot(d,d);}
+void main(){vec2 p=a_position;float r=length(p);if(u_space==0){vec2 k=p*tanh(u_extent);p=k/(1.0+sqrt(max(0.000001,1.0-dot(k,k))));}vec2 absolute=p;if(u_space!=2)p=translate(p,-u_observer);float cs=cos(u_angle),sn=sin(u_angle);p=mat2(cs,sn,-sn,cs)*p;v_disk=p;float rho=min(length(p),.999999);v_distance=log((1.0+rho)/(1.0-rho));
+if(u_mode==0){vec2 k=u_space==0?a_position:2.0*absolute/(1.0+dot(absolute,absolute))/tanh(u_extent);gl_Position=vec4((k-u_pan)*u_scale,0,1);}else if(u_mode==1){gl_Position=vec4(p*u_scale,0,1);}else{float d=max(0.0000001,1.0-dot(p,p));vec3 h=vec3(2.0*p,1.0+dot(p,p))/d;if(u_cone){vec2 q=u_space==3?vec2(cos(a_position.x),sin(a_position.x)):2.0*p/(1.0+dot(p,p))/tanh(u_extent);vec2 relative=u_space==3?q:q-u_hole;float radius=length(relative);vec2 direction=radius>.000001?relative/radius:vec2(1.0,0.0);float projection=dot(u_hole,direction);float outer=-projection+sqrt(max(.000001,projection*projection+1.0-dot(u_hole,u_hole)));float t=u_space==3?a_position.y:clamp((radius-u_inner)/(outer-u_inner),0.0,1.0);float e=exp(u_extent*t);h=vec3(direction*(e+1.0/e)*.5,u_sheet*(e-1.0/e)*.5);if(u_space==3)v_disk=vec2(0.0);}gl_Position=u_matrix*vec4(h,1);gl_Position.z-=0.00006*gl_Position.w;}
+vec3 color=u_palette[0];if(a_branch>.5)color=u_palette[1];if(a_branch>1.5)color=u_palette[2];if(a_branch>2.5)color=u_palette[3];if(a_branch>3.5)color=u_palette[4];
+if(u_radial&&u_space==0){float t=clamp(r,0.0,1.0)*4.0;if(t<1.0)color=mix(u_palette[0],u_palette[1],t);else if(t<2.0)color=mix(u_palette[1],u_palette[2],t-1.0);else if(t<3.0)color=mix(u_palette[2],u_palette[3],t-2.0);else color=mix(u_palette[3],u_palette[4],t-3.0);}
+v_color=u_solid?u_color:vec4(color,a_alpha);gl_PointSize=32.0*u_pixel_ratio;}`;
+const fragmentSource=`precision highp float;precision highp int;
+varying lowp vec4 v_color;varying highp vec2 v_disk;varying highp float v_distance;
+uniform int u_mode;uniform float u_clip;uniform bool u_point;uniform float u_fog_distance;uniform vec2 u_marker_heading;
+float segmentDistance(vec2 p,vec2 a,vec2 b){vec2 v=b-a;return length(p-a-v*clamp(dot(p-a,v)/dot(v,v),0.0,1.0));}
+void main(){
+ if(u_mode==1&&dot(v_disk,v_disk)>.99999)discard;if(u_mode>=2&&length(v_disk)>u_clip)discard;
+ if(u_point){
+  // High-contrast white outline with a dark keyline; no filled backing. The center and
+  // the rest of the point sprite remain completely transparent.
+  vec2 q=(gl_PointCoord-vec2(.5))*32.0;
+  vec2 forward=u_marker_heading,right=vec2(-forward.y,forward.x);
+  vec2 p=vec2(dot(q,right),-dot(q,forward));
+  vec2 a=vec2(0.0,-8.2),b=vec2(6.7,6.8),c=vec2(0.0,4.4),d=vec2(-6.7,6.8);
+  float dist=min(min(segmentDistance(p,a,b),segmentDistance(p,b,c)),min(segmentDistance(p,c,d),segmentDistance(p,d,a)));
+  float ink=1.0-smoothstep(.95,1.5,dist),keyline=1.0-smoothstep(2.5,3.3,dist);
+  if(keyline<.002)discard;
+  gl_FragColor=vec4(mix(vec3(.015,.025,.04),vec3(1.0,1.0,.96),ink),max(ink,keyline*.96));return;
+ }
+ vec4 color=v_color;if(u_mode==3){float fog=smoothstep(u_fog_distance*.30,u_fog_distance,v_distance);color.rgb=mix(color.rgb,vec3(.043,.063,.098),fog*.86);}gl_FragColor=color;
+}`;
+function compile(gl,type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;}
+function initView(canvas,mode){const gl=canvas.getContext('webgl',{antialias:true,alpha:false,powerPreference:'high-performance'});if(!gl)throw Error('WebGL jest niedostępny. Otwórz plik w przeglądarce z włączoną akceleracją sprzętową.');const p=gl.createProgram(),vs=compile(gl,gl.VERTEX_SHADER,vertexSource),fs=compile(gl,gl.FRAGMENT_SHADER,fragmentSource);gl.attachShader(p,vs);gl.attachShader(p,fs);gl.linkProgram(p);gl.deleteShader(vs);gl.deleteShader(fs);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(p));const uniforms={};for(const key of ['mode','space','cone','sheet','inner','hole','extent','observer','angle','pan','scale','matrix','palette[0]','radial','solid','color','clip','point','fog_distance','pixel_ratio','marker_heading'])uniforms[key]=gl.getUniformLocation(p,'u_'+key);const attrs={};for(const key of ['position','branch','alpha'])attrs[key]=gl.getAttribLocation(p,'a_'+key);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.clearColor(11/255,16/255,25/255,1);return {canvas,mode,gl,p,uniforms,attrs,buffers:{},lost:false};}
+function upload(v,key,data,dynamic=false){if(v.lost)return;const gl=v.gl;let b=v.buffers[key];if(!b)b=v.buffers[key]={buffer:gl.createBuffer(),count:0};b.count=data.length/4;gl.bindBuffer(gl.ARRAY_BUFFER,b.buffer);gl.bufferData(gl.ARRAY_BUFFER,data,dynamic?gl.DYNAMIC_DRAW:gl.STATIC_DRAW);}
+function drawBuffer(v,key,type,space=0,color=null,points=false){const b=v.buffers[key];if(!b||!b.count)return;const {gl,uniforms:u,attrs:a}=v;gl.uniform1i(u.space,space);gl.uniform1i(u.solid,color?1:0);if(color)gl.uniform4fv(u.color,color);gl.uniform1i(u.point,points?1:0);gl.bindBuffer(gl.ARRAY_BUFFER,b.buffer);gl.enableVertexAttribArray(a.position);gl.vertexAttribPointer(a.position,2,gl.FLOAT,false,16,0);gl.enableVertexAttribArray(a.branch);gl.vertexAttribPointer(a.branch,1,gl.FLOAT,false,16,8);gl.enableVertexAttribArray(a.alpha);gl.vertexAttribPointer(a.alpha,1,gl.FLOAT,false,16,12);gl.drawArrays(type,0,b.count);}
+function refreshAux(){if(!views.length)return;const grid=[],cartGrid=[],axes=[],rim=[],surface=[];const add=(out,p)=>out.push(p[0],p[1],0,1);const seg=(out,a,b)=>{add(out,a);add(out,b);};const maxR=state.extent+(state.model==='one-sheet'?0:.7);
+for(let d=.5;d<=maxR;d+=.5){const r=state.model==='one-sheet'?d/maxR:Math.tanh(d/2);for(let j=0;j<192;j++)seg(grid,[r*Math.cos(j*Math.PI/96),r*Math.sin(j*Math.PI/96)],[r*Math.cos((j+1)*Math.PI/96),r*Math.sin((j+1)*Math.PI/96)]);}
+for(let j=0;j<12;j++){const a=j*Math.PI/6;for(let d=0;d<maxR;d+=.04)seg(grid,[(state.model==='one-sheet'?d/maxR:Math.tanh(d/2))*Math.cos(a),(state.model==='one-sheet'?d/maxR:Math.tanh(d/2))*Math.sin(a)],[(state.model==='one-sheet'?Math.min(1,(d+.04)/maxR):Math.tanh((d+.04)/2))*Math.cos(a),(state.model==='one-sheet'?Math.min(1,(d+.04)/maxR):Math.tanh((d+.04)/2))*Math.sin(a)]);}
+for(let j=-6;j<=6;j++){seg(cartGrid,[-1.5,j*.25],[1.5,j*.25]);seg(cartGrid,[j*.25,-1.5],[j*.25,1.5]);}for(let j=0;j<256;j++)seg(rim,[.999*Math.cos(j*Math.PI/128),.999*Math.sin(j*Math.PI/128)],[.999*Math.cos((j+1)*Math.PI/128),.999*Math.sin((j+1)*Math.PI/128)]);
+const n=state.model==='one-sheet'?1:3;for(let j=0;j<n;j++){const a=state.model==='one-sheet'?0:j*Math.PI/n;for(let s=-1;s<1;s+=.02)seg(axes,[s*Math.sin(a),s*Math.cos(a)],[(s+.02)*Math.sin(a),(s+.02)*Math.cos(a)]);}
+for(let j=0;j<112;j++)for(let k=0;k<160;k++){const r1=state.model==='one-sheet'?j/112:Math.tanh(maxR*j/224),r2=state.model==='one-sheet'?(j+1)/112:Math.tanh(maxR*(j+1)/224),a=k*Math.PI/80,b=(k+1)*Math.PI/80;const p=[r1*Math.cos(a),r1*Math.sin(a)],q=[r2*Math.cos(a),r2*Math.sin(a)],r=[r2*Math.cos(b),r2*Math.sin(b)],s=[r1*Math.cos(b),r1*Math.sin(b)];for(const t of state.model==='one-sheet'?[[a,j/112],[a,(j+1)/112],[b,(j+1)/112],[a,j/112],[b,(j+1)/112],[b,j/112]]:[p,q,r,p,r,s])add(surface,t);}
+if(state.model==='one-sheet'){grid.length=0;for(let i=0;i<=10;i++)for(let j=0;j<192;j++)seg(grid,[j*Math.PI/96,i/10],[(j+1)*Math.PI/96,i/10]);for(let i=0;i<12;i++)for(let j=0;j<80;j++)seg(grid,[i*Math.PI/6,j/80],[i*Math.PI/6,(j+1)/80]);}
+for(const v of views){upload(v,'grid',new Float32Array(grid));upload(v,'cartGrid',new Float32Array(cartGrid));upload(v,'axes',new Float32Array(axes));upload(v,'rim',new Float32Array(rim));upload(v,'surface',new Float32Array(surface));}state.dirty=true;}
+// Column-major perspective × lookAt, with Z as the vertical model axis.
+function cameraMatrix(aspect){const c=camera[2],R=state.extent,span=state.model==='one-sheet'?Math.cosh(R):Math.sinh(R+.35),target=[0,0,state.model==='one-sheet'?0:(Math.cosh(R)-1)*.36+1],dist=(span*(state.model==='one-sheet'?3.1:3.2)+2)/c.zoom,cp=Math.cos(c.polar),sp=Math.sin(c.polar),eye=[dist*sp*Math.cos(c.azimuth),dist*sp*Math.sin(c.azimuth),target[2]+dist*cp];const normalize=p=>{const l=Math.hypot(...p);return p.map(x=>x/l);},cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],dot=(a,b)=>a.reduce((s,x,i)=>s+x*b[i],0);const z=normalize(eye.map((x,i)=>x-target[i])),x=normalize(cross([0,0,1],z)),y=cross(z,x);const view=[x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1];const near=.03,far=Math.max(1000,dist*8),f=1/Math.tan(Math.PI/7);const p=[f/aspect,0,0,0,0,f,0,0,0,0,(far+near)/(near-far),-1,0,0,2*far*near/(near-far),0],out=new Float32Array(16);for(let col=0;col<4;col++)for(let row=0;row<4;row++)for(let k=0;k<4;k++)out[col*4+row]+=p[k*4+row]*view[col*4+k];return out;}
+function povCameraMatrix(aspect){
+ if(state.model==='one-sheet'){
+  const {theta,u}=state.one,c=camera[3],ct=Math.cos(theta),st=Math.sin(theta),ch=Math.cosh(u),sh=Math.sinh(u),metric=Math.sqrt(Math.cosh(2*u));
+  const point=singlePoint(theta,u),up=[-ch*ct/metric,-ch*st/metric,sh/metric];
+  const east=[-st,ct,0],north=[sh*ct/metric,sh*st/metric,ch/metric];
+  const forward=east.map((v,i)=>v*Math.cos(state.yaw)+north[i]*Math.sin(state.yaw));
+  const direction=forward.map((v,i)=>v*Math.cos(c.pitch)+up[i]*Math.sin(c.pitch));
+  const right=[forward[1]*up[2]-forward[2]*up[1],forward[2]*up[0]-forward[0]*up[2],forward[0]*up[1]-forward[1]*up[0]];
+  const back=direction.map(v=>-v),vertical=[back[1]*right[2]-back[2]*right[1],back[2]*right[0]-back[0]*right[2],back[0]*right[1]-back[1]*right[0]];
+  const eye=point.map((v,i)=>v+up[i]*c.height),dot=(a,b)=>a.reduce((sum,v,i)=>sum+v*b[i],0);
+  const view=[right[0],vertical[0],back[0],0,right[1],vertical[1],back[1],0,right[2],vertical[2],back[2],0,-dot(right,eye),-dot(vertical,eye),-dot(back,eye),1];
+  const near=.012,far=Math.max(500,Math.cosh(state.extent)*8),f=c.zoom/Math.tan(c.fov*Math.PI/360),projection=[f/aspect,0,0,0,0,f,0,0,0,0,(far+near)/(near-far),-1,0,0,2*far*near/(near-far),0],out=new Float32Array(16);
+  for(let col=0;col<4;col++)for(let row=0;row<4;row++)for(let k=0;k<4;k++)out[col*4+row]+=projection[k*4+row]*view[col*4+k];return out;
+ }
+ const c=camera[3],yaw=state.yaw,cp=Math.cos(c.pitch),sp=Math.sin(c.pitch),cy=Math.cos(yaw),sy=Math.sin(yaw);
+ const eye=[0,0,(state.model==='one-sheet'?0:1)+c.height],right=[sy,-cy,0],up=[-sp*cy,-sp*sy,cp],back=[-cp*cy,-cp*sy,-sp];
+ const dot=(a,b)=>a.reduce((sum,x,i)=>sum+x*b[i],0);
+ const view=[right[0],up[0],back[0],0,right[1],up[1],back[1],0,right[2],up[2],back[2],0,-dot(right,eye),-dot(up,eye),-dot(back,eye),1];
+ const near=.012,far=Math.max(500,Math.cosh(state.extent+.7)*4),f=c.zoom/Math.tan((c.fov||75)*Math.PI/360),projection=[f/aspect,0,0,0,0,f,0,0,0,0,(far+near)/(near-far),-1,0,0,2*far*near/(near-far),0],out=new Float32Array(16);
+ for(let col=0;col<4;col++)for(let row=0;row<4;row++)for(let k=0;k<4;k++)out[col*4+row]+=projection[k*4+row]*view[col*4+k];return out;
+}
+function updateDynamic(){
+ if(state.model==='one-sheet'){
+  for(const v of views){
+   for(const side of [1,-1]){
+    const prefix=side<0?'lower-':'';const currentSide=state.one.u<0?-1:1;
+    const position=oneSource(state.one.theta,state.one.u,side);
+    upload(v,prefix+'player',new Float32Array([...position,0,1]),true);
+    const trail=[];for(let i=1;i<state.oneTrail.length;i++){
+     const a=state.oneTrail[i-1],b=state.oneTrail[i];if(a.u*side<0||b.u*side<0)continue;
+     trail.push(...oneSource(a.theta,a.u,side),0,1,...oneSource(b.theta,b.u,side),0,1);
+    }upload(v,prefix+'trail',new Float32Array(trail),true);
+   }
+  }return;
+ }
+ const trail=[];for(const p of state.trail)trail.push(...p,0,1);for(const v of views){upload(v,'trail',new Float32Array(trail),true);upload(v,'player',new Float32Array([...state.a,0,1]),true);}
+}
+// Project the tangent into each camera, so the small navigation outline turns
+// in the same direction as movement, including the orbiting hyperboloid view.
+function markerHeading(mode,width,height,observer,matrix,mapSide=state.one.u<0?-1:1){
+ if(state.model==='one-sheet'){
+  const project=(theta,u)=>{
+   if(mode<2){const p=oneSource(theta,u,mapSide);const d=1+p[0]*p[0]+p[1]*p[1];let q=mode===0?[2*p[0]/d/Math.tanh(state.extent),2*p[1]/d/Math.tanh(state.extent)]:p;if(mode===1){const cs=Math.cos(state.diskAngle),sn=Math.sin(state.diskAngle);q=[cs*q[0]-sn*q[1],sn*q[0]+cs*q[1]];}return [q[0]*width,-q[1]*height];}
+   const point=[...singlePoint(theta,u),1],clip=[0,0,0,0];for(let row=0;row<4;row++)for(let col=0;col<4;col++)clip[row]+=matrix[col*4+row]*point[col];return [clip[0]/clip[3]*width,-clip[1]/clip[3]*height];
+  };
+  const {theta,u}=state.one,a=project(theta,u),b=project(theta+.0001*Math.cos(state.yaw)/Math.cosh(u),u+.0001*Math.sin(state.yaw)/Math.sqrt(Math.cosh(2*u))),dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy);return length>1e-12?[dx/length,dy/length]:[0,-1];
+ }
+ const angle=mode===0?0:state.diskAngle,cs=Math.cos(angle),sn=Math.sin(angle);
+ function project(absolute){
+  if(mode===0){const d=1+absolute[0]**2+absolute[1]**2;return [2*absolute[0]/d, -2*absolute[1]/d];}
+  let p=mobius(absolute,[-observer[0],-observer[1]]);p=[cs*p[0]-sn*p[1],sn*p[0]+cs*p[1]];
+  if(mode===1)return [p[0],-p[1]];
+  const h=[...modelLift(p),1],clip=[0,0,0,0];
+  for(let row=0;row<4;row++)for(let col=0;col<4;col++)clip[row]+=matrix[col*4+row]*h[col];
+  return [clip[0]/clip[3]*width,-clip[1]/clip[3]*height];
+ }
+ const p=project(state.a),next=project(mobius([.0001*Math.cos(state.yaw),.0001*Math.sin(state.yaw)],state.a));
+ const dx=next[0]-p[0],dy=next[1]-p[1],length=Math.hypot(dx,dy);
+ return length>1e-10?[dx/length,dy/length]:[0,-1];
+}
+function render(){if(!booted)return;syncMapPanels();updateDynamic();for(const v of views){if(v.lost||!v.canvas.getClientRects().length)continue;const {gl,uniforms:u,mode:m,canvas}=v,rect=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2),w=Math.max(1,Math.round(rect.width*dpr)),h=Math.max(1,Math.round(rect.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(v.p);gl.uniform1i(u.mode,m);gl.uniform1i(u.cone,state.model==='one-sheet'?1:0);gl.uniform1f(u.sheet,1);gl.uniform1f(u.inner,state.geometry?.innerRadius||0);gl.uniform2fv(u.hole,state.geometry?.innerCenter||[0,0]);gl.uniform1f(u.extent,state.extent);gl.uniform1f(u.fog_distance,state.sight);gl.uniform1f(u.clip,Math.tanh((state.extent+(state.model==='one-sheet'?0:.7))/2)+.000001);const observer=state.model==='one-sheet'?[0,0]:m===3||($('follow').checked&&m!==0)?state.a:[0,0];gl.uniform2fv(u.observer,observer);gl.uniform1f(u.angle,(state.model==='one-sheet'&&m!==1)||m===0||m===3?0:state.diskAngle);gl.uniform2f(u.pan,camera[0].x,camera[0].y);const scale=Math.min(w,h)*.41*camera[m].zoom;gl.uniform2f(u.scale,2*scale/w,2*scale/h);const matrix=m===3?povCameraMatrix(w/h):cameraMatrix(w/h);gl.uniformMatrix4fv(u.matrix,false,matrix);gl.uniform1f(u.pixel_ratio,dpr);if(m!==3)gl.uniform2fv(u.marker_heading,markerHeading(m,w,h,observer,matrix,flatMapSide(v)));gl.uniform1i(u.radial,0);gl.uniform3fv(u['palette[0]'],new Float32Array(palettes[$('palette').value].flatMap(hex=>{const n=parseInt(hex.slice(1),16);return [(n>>16&255)/255,(n>>8&255)/255,(n&255)/255];})));
+const cone=state.model==='one-sheet';
+if(m>=2&&cone){gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);}else gl.disable(gl.DEPTH_TEST);
+// Opaque cone backing and depth testing keep the far nappe behind the near one.
+if(m>=2&&$('surface').checked){
+ if(cone){gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(2,4);}
+ for(const side of cone?[1,-1]:[1]){if(cone&&!$(side===1?'show-upper':'show-lower').checked)continue;gl.uniform1f(u.sheet,side);drawBuffer(v,'surface',gl.TRIANGLES,cone?3:2,cone?[.055,.12,.15,1]:m===3?[.10,.16,.21,1]:[.18,.32,.43,.12]);}
+ gl.disable(gl.POLYGON_OFFSET_FILL);
+}
+if(m>=2){gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);}
+if($('grid').checked&&!cone){for(const side of cone&&m>=2?[1,-1]:[1]){if(cone&&m>=2&&!$(side===1?'show-upper':'show-lower').checked)continue;gl.uniform1f(u.sheet,side);drawBuffer(v,m===0?'cartGrid':'grid',gl.LINES,m===0?0:m===3?1:2,[.35,.49,.66,m===3?.38:.23]);}}
+if(cone&&m>=2&&$('grid').checked){for(const side of [1,-1]){if(!$(side===1?'show-upper':'show-lower').checked)continue;gl.uniform1f(u.sheet,side);drawBuffer(v,'grid',gl.LINES,3,[.35,.65,.69,.4]);}}
+if(m===1)drawBuffer(v,'rim',gl.LINES,2,[.51,.75,.86,.8]);
+const g=state.geometry;
+if(g&&g.model===state.model&&g.pattern===$('hyper-pattern').value){
+ const mapSide=flatMapSide(v);
+ const parts=cone?(m>=2?[['',1],['lower-',-1]]:[[mapSide<0?'lower-':'',mapSide]]):[['',1]];
+ for(const [prefix,side] of parts){
+  if(cone&&m>=2&&!$(side===1?'show-upper':'show-lower').checked)continue;
+  gl.uniform1f(u.sheet,side);gl.uniform1f(u.inner,side<0?g.lower.innerRadius:g.innerRadius);gl.uniform2fv(u.hole,side<0?g.lower.innerCenter:g.innerCenter);
+  drawBuffer(v,prefix+'fill',gl.TRIANGLES);
+  if($('contours').checked)drawBuffer(v,prefix+'lines',gl.LINES);
+  if($('circle-guides').checked)drawBuffer(v,prefix+'guides',gl.LINES,0,[.60,.83,.84,.6]);
+  if($('outline').checked&&!$('outline').disabled)drawBuffer(v,prefix+'boundary',gl.LINES,0,[.69,.8,.88,.8]);
+  if($('axes').checked)drawBuffer(v,'axes',gl.LINES,0,[1,.84,.41,.45]);
+ }
+}
+gl.disable(gl.DEPTH_TEST);
+if(cone&&g?.lower){
+ const activeSide=state.one.u<0?-1:1,side=m<2?flatMapSide(v):activeSide,prefix=side<0?'lower-':'';
+ gl.uniform1f(u.sheet,side);gl.uniform1f(u.inner,side<0?g.lower.innerRadius:g.innerRadius);gl.uniform2fv(u.hole,side<0?g.lower.innerCenter:g.innerCenter);
+ if($(side===1?'show-upper':'show-lower').checked){
+  if($('trail').checked)drawBuffer(v,prefix+'trail',gl.LINES,1,[1,.8,.42,.8]);
+  if(m!==3&&side===activeSide&&$('marker').checked)drawBuffer(v,prefix+'player',gl.POINTS,1,[.96,.90,.76,1],true);
+ }
+}else{
+ gl.uniform1f(u.sheet,1);
+ if($('trail').checked)drawBuffer(v,'trail',gl.LINE_STRIP,1,[1,.8,.42,.8]);
+ if(m!==3&&$('marker').checked)drawBuffer(v,'player',gl.POINTS,1,[.96,.90,.76,1],true);
+}
+}const a=state.a,h=modelLift(a);$('distance').textContent=fmt(state.model==='one-sheet'?state.one.u:2*Math.atanh(Math.hypot(...a)),3);$('position').textContent=(state.model==='one-sheet'?[state.one.theta,state.one.u]:a).map(x=>fmt(x,3)).join('; ');$('lift').textContent=h.map(x=>fmt(x)).join('; ');$('heading').textContent=fmt(((state.yaw*180/Math.PI)%360+360)%360,0)+'°';$('walk-status').textContent=state.limit?(state.model==='one-sheet'?'Osiągnięto brzeg powierzchni · zmień kierunek lub zwiększ R.':'Osiągnięto granicę ruchu (dₕ = 3,9).'):state.model==='one-sheet'?(state.one.u<0?'Dolna połowa · układ asymetryczny':state.one.u>0?'Górna połowa · układ symetryczny':'Talia · przejście między układami'):'Wspólna pozycja we wszystkich widokach.';state.dirty=false;}
+function reset(){state.one={theta:-1.05,u:0};state.oneTrail=[];state.a=[0,0];state.yaw=Math.PI/2;state.trail=[[0,0]];state.keys.clear();state.limit=false;state.dirty=true;}
+function step(ds){
+ if(state.model==='one-sheet'){
+  const {theta,u}=state.one,half=u+ds*.5*Math.sin(state.yaw)/Math.sqrt(Math.cosh(2*u));
+  const next=u+ds*Math.sin(state.yaw)/Math.sqrt(Math.cosh(2*half));
+  state.one={theta:theta+ds*Math.cos(state.yaw)/Math.cosh(half),u:clamp(next,-state.extent,state.extent)};
+  state.limit=next!==state.one.u;
+  const previous=state.oneTrail.at(-1);if(!previous||Math.hypot(state.one.theta-previous.theta,state.one.u-previous.u)>.002){state.oneTrail.push({...state.one});if(state.oneTrail.length>1600)state.oneTrail.shift();}
+  state.dirty=true;return;
+ }
+ const a=state.a,t=[Math.tanh(ds/2)*Math.cos(state.yaw),Math.tanh(ds/2)*Math.sin(state.yaw)],next=mobius(t,a);if(Math.hypot(...next)>Math.tanh(3.9/2)){state.limit=true;state.dirty=true;return;}state.limit=false;state.yaw-=2*Math.atan2(a[0]*t[1]-a[1]*t[0],1+a[0]*t[0]+a[1]*t[1]);state.a=next;const prev=state.trail.at(-1);if(Math.hypot(next[0]-prev[0],next[1]-prev[1])>.002){state.trail.push(next.slice());if(state.trail.length>1600)state.trail.shift();}state.dirty=true;}
+function startKey(k){if(state.keys.has(k))return;state.keys.add(k);if(k==='w'||k==='s')step((k==='w'?1:-1)*.025);if(k==='a'||k==='d'){state.yaw+=(k==='a'?1:-1)*.035;state.dirty=true;}}
+function fit(i){camera[i].zoom=1;if(i===0){camera[0].x=0;camera[0].y=0;}if(i===1)state.diskAngle=0;if(i===2){camera[2].azimuth=-1.05;camera[2].polar=state.model==='one-sheet'?1.18:1.02;}if(i===3){camera[3].pitch=-.08;camera[3].fov=75;syncLens();}state.dirty=true;}
+function syncLens(){const c=camera[3],angle=2*Math.atan(Math.tan((c.fov||75)*Math.PI/360)/c.zoom)*180/Math.PI;$('pov-fov').value=clamp(angle,35,115);$('pov-fov-value').textContent=fmt(angle,0)+'°';}
+function changeZoom(i,f){if(i===3){const c=camera[3];c.fov=clamp(2*Math.atan(Math.tan(c.fov*Math.PI/360)/f)*180/Math.PI,35,115);c.zoom=1;syncLens();}else camera[i].zoom=clamp(camera[i].zoom*f,.35,i===2?6:12);state.dirty=true;}
+// This mode changes only layout. Geometry, cameras and movement are shared
+// with the existing overview and focused views and survive mode switches.
+function setQuadView(enabled){
+ if(quadView===enabled)return;
+ if(enabled){
+  quadReturn={focusedView,cleanView};
+  if(cleanView)setCleanView(false);
+  selectView(null);
+  quadView=true;document.body.classList.add('quad-view');
+  $('quad-mode').setAttribute('aria-pressed','true');
+  views[0].canvas.focus({preventScroll:true});
+ }else{
+  quadView=false;document.body.classList.remove('quad-view');
+  $('quad-mode').setAttribute('aria-pressed','false');
+  const previous=quadReturn;quadReturn=null;
+  selectView(previous?.focusedView??null);
+  if(previous?.cleanView)setCleanView(true);
+  else if(previous?.focusedView==null)$('quad-mode').focus({preventScroll:true});
+  const owned=quadFullscreen;quadFullscreen=false;
+  if(owned&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+ }
+ state.keys.clear();state.dirty=true;
+}
+async function openQuadView(){
+ setQuadView(true);
+ // Use the full display when supported, otherwise keep the exact same 2×2
+ // layout across the browser viewport. A pre-existing full screen is retained.
+ if(!document.fullscreenElement&&document.documentElement.requestFullscreen){
+  quadFullscreen=true;
+  try{await document.documentElement.requestFullscreen();if(!quadView&&document.fullscreenElement)await document.exitFullscreen();}
+  catch{quadFullscreen=false;}
+ }
+}
+function setCleanView(enabled){if(enabled&&quadView)setQuadView(false);if(enabled&&focusedView===null)selectView(3);cleanView=enabled;state.keys.clear();document.body.classList.toggle('clean-view',enabled);$('clean-mode').checked=enabled;$('interface-mode').checked=!enabled;state.dirty=true;if(focusedView!==null)views[focusedView].canvas.focus({preventScroll:true});}
+function applyShot(name){
+ const shots={subtle:{radius:3.4,fov:80,height:.18,pitch:-.12,sight:7},deep:{radius:4.8,fov:95,height:.14,pitch:.06,sight:10},monument:{radius:6,fov:105,height:.10,pitch:.14,sight:13}},shot=shots[name];if(!shot)return;
+ state.extent=shot.radius;state.sight=shot.sight;$('extent').value=shot.radius;$('sight').value=shot.sight;$('sight-value').textContent=fmt(shot.sight,1);
+ Object.assign(camera[3],{zoom:1,fov:shot.fov,height:shot.height,pitch:shot.pitch});$('eye-height').value=shot.height;$('eye-height-value').textContent=fmt(shot.height);syncLens();
+ if(focusedView===null)selectView(3);refreshAux();rebuild();state.dirty=true;
+}
+function selectView(index){
+ if(index===null&&cleanView)setCleanView(false);
+ const container=$('views'),panels=[...container.querySelectorAll('.view')],previous=focusedView;
+ focusedView=index;state.keys.clear();container.classList.toggle('focused',index!==null);container.classList.toggle('map-corners',index===2||index===3);container.classList.toggle('previews-hidden',!showPreviews);
+ $('view-toolbar').hidden=index===null;let previewOrder=0;
+ panels.forEach((panel,i)=>{const primary=i===index,preview=index!==null&&!primary;
+  panel.style.setProperty('--preview-order',previewOrder);panel.classList.toggle('is-primary',primary);panel.classList.toggle('is-preview',preview);
+  panel.classList.toggle('preview-first',preview&&previewOrder===0);panel.classList.toggle('preview-second',preview&&previewOrder===1);if(preview)previewOrder++;
+  panel.querySelector('.focus-view').setAttribute('aria-expanded',String(primary));
+  panel.querySelector('canvas').tabIndex=preview?-1:0;
+ });
+ // Keep the existing canvases, cameras, movement and GPU buffers when changing layout.
+ state.dirty=true;
+ if(index!==null)views[index].canvas.focus({preventScroll:true});
+ else if(previous!==null)panels[previous].querySelector('.focus-view').focus({preventScroll:true});
+}
+function initViewSelection(){
+ $('quad-mode').addEventListener('click',openQuadView);$('quad-exit').addEventListener('click',()=>setQuadView(false));
+ document.querySelectorAll('[data-panel]').forEach(panel=>{const index=Number(panel.dataset.panel);
+  panel.querySelector('.focus-view').addEventListener('click',()=>selectView(index));
+  panel.querySelector('.preview-select').addEventListener('click',()=>selectView(index));
+ });
+ $('open-pov').addEventListener('click',()=>selectView(3));
+ $('overview').addEventListener('click',()=>selectView(null));
+ $('toggle-previews').addEventListener('click',()=>{showPreviews=!showPreviews;$('views').classList.toggle('previews-hidden',!showPreviews);$('toggle-previews').setAttribute('aria-pressed',String(showPreviews));$('toggle-previews').textContent=showPreviews?'Ukryj podglądy':'Pokaż podglądy';state.dirty=true;});
+ window.addEventListener('keydown',e=>{if(e.key==='Escape'){if(quadView){e.preventDefault();setQuadView(false);}else if(cleanView){e.preventDefault();setCleanView(false);}else if(focusedView!==null){e.preventDefault();selectView(null);}}else if(e.key.toLowerCase()==='f'&&!e.repeat&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!e.target.matches('input,select,textarea,[contenteditable=true]')){e.preventDefault();if(quadView)setQuadView(false);else openQuadView();}});
+}
+function controls(){initViewSelection();syncModel();
+ $('geometry').addEventListener('change',changeModel);
+ $('hyper-pattern').addEventListener('change',()=>{syncModel();refreshAux();rebuild();state.dirty=true;});
+ window.addEventListener('keydown',e=>{if(state.model==='hyperboloid'&&e.key.toLowerCase()==='p'&&!e.repeat&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!e.target.matches('input,select,textarea,[contenteditable=true]')){e.preventDefault();$('hyper-pattern').value=$('hyper-pattern').value==='symmetric'?'asymmetric':'symmetric';syncModel();refreshAux();rebuild();state.dirty=true;}});
+ $('cone-seed').addEventListener('input',()=>{syncModel();rebuild();});
+ window.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='g'&&!e.repeat&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!e.target.matches('input,select,textarea,[contenteditable=true]')){e.preventDefault();$('geometry').value=state.model==='one-sheet'?'hyperboloid':'one-sheet';changeModel();}});
+ $('clean-mode').addEventListener('change',()=>{if($('clean-mode').checked)setCleanView(true);});$('interface-mode').addEventListener('change',()=>{if($('interface-mode').checked)setCleanView(false);});
+ document.querySelectorAll('[data-shot]').forEach(button=>button.addEventListener('click',()=>applyShot(button.dataset.shot)));
+ $('pov-fov').addEventListener('input',()=>{camera[3].fov=+$('pov-fov').value;camera[3].zoom=1;syncLens();state.dirty=true;});
+ $('sight').addEventListener('input',()=>{state.sight=+$('sight').value;$('sight-value').textContent=fmt(state.sight,1);state.dirty=true;});
+$('eye-height').addEventListener('input',()=>{camera[3].height=+$('eye-height').value;$('eye-height-value').textContent=fmt(camera[3].height);state.dirty=true;});for(const id of ['sectors','depth','twist','scale','packing'])$(id).addEventListener('input',rebuild);function chooseN(n){$('sectors').value=clamp(Math.round(Number(n)||12),3,24);rebuild();}$('sectors-number').addEventListener('change',e=>chooseN(e.target.value));document.querySelectorAll('[data-n]').forEach(b=>b.addEventListener('click',()=>chooseN(b.dataset.n)));$('extent').addEventListener('input',()=>{state.extent=+$('extent').value;state.one.u=clamp(state.one.u,-state.extent,state.extent);refreshAux();rebuild();});for(const id of ['show-upper','show-lower','palette','contours','outline','circle-guides','axes','grid','surface','follow','trail','marker'])$(id).addEventListener('change',()=>{state.dirty=true;});$('reset').addEventListener('click',reset);$('defaults').addEventListener('click',()=>{for(const [id,value] of Object.entries({sectors:12,depth:4,packing:4,twist:0,scale:98,extent:2.2,geometry:'one-sheet','hyper-pattern':'symmetric','cone-seed':32,palette:'mineral'}))$(id).value=value;for(const id of ['show-upper','show-lower','contours','outline','surface','follow','trail','marker'])$(id).checked=true;$('axes').checked=false;$('grid').checked=false;$('circle-guides').checked=false;state.model='one-sheet';syncModel();state.extent=2.2;state.sight=8;$('sight').value=8;$('sight-value').textContent=fmt(8,1);reset();for(let i=0;i<camera.length;i++)fit(i);camera[3].height=.28;$('eye-height').value=.28;$('eye-height-value').textContent=fmt(.28);refreshAux();rebuild();});
+window.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea,button'))return;const k=e.key.toLowerCase();if(['w','a','s','d','shift','r'].includes(k)){e.preventDefault();if(k==='r')reset();else startKey(k);}});window.addEventListener('keyup',e=>state.keys.delete(e.key.toLowerCase()));window.addEventListener('blur',()=>state.keys.clear());document.addEventListener('visibilitychange',()=>{state.keys.clear();});document.querySelectorAll('[data-key]').forEach(b=>{b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);startKey(b.dataset.key);});for(const name of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(name,()=>state.keys.delete(b.dataset.key));});
+for(const v of views){const i=v.mode,c=v.canvas,pointers=new Map();let gesture=null;function measure(){const a=[...pointers.values()];return a.length?{x:a.reduce((s,p)=>s+p.x,0)/a.length,y:a.reduce((s,p)=>s+p.y,0)/a.length,d:a.length>1?Math.hypot(a[1].x-a[0].x,a[1].y-a[0].y):0}:null;}
+c.addEventListener('pointerdown',e=>{if(focusedView!==null&&focusedView!==i)return;if(e.button!==0&&e.pointerType==='mouse')return;c.focus({preventScroll:true});c.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});gesture=measure();});c.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});const next=measure();if(gesture){const dx=next.x-gesture.x,dy=next.y-gesture.y;if(next.d&&gesture.d)changeZoom(i,next.d/gesture.d);else if(i===0){const scale=Math.min(c.clientWidth,c.clientHeight)*.41*camera[0].zoom;camera[0].x-=dx/scale;camera[0].y+=dy/scale;}else if(i===1)state.diskAngle+=dx*.008;else if(i===3){state.yaw-=dx*.006;camera[3].pitch=clamp(camera[3].pitch-dy*.006,-1.15,.85);}else{camera[2].azimuth-=dx*.008;camera[2].polar=clamp(camera[2].polar+dy*.008,.15,2.2);}state.dirty=true;}gesture=next;});for(const name of ['pointerup','pointercancel','lostpointercapture'])c.addEventListener(name,e=>{pointers.delete(e.pointerId);gesture=measure();});c.addEventListener('wheel',e=>{if(focusedView!==null&&focusedView!==i)return;e.preventDefault();changeZoom(i,Math.exp(-clamp(e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?c.clientHeight:1),-250,250)*.002));},{passive:false});c.addEventListener('dblclick',()=>fit(i));c.addEventListener('webglcontextlost',e=>{e.preventDefault();v.lost=true;fail('Utracono kontekst WebGL. Oczekiwanie na przywrócenie GPU…');});c.addEventListener('webglcontextrestored',()=>{try{Object.assign(v,initView(c,i));if(state.geometry)uploadGeometry(v,state.geometry);refreshAux();if(views.every(view=>!view.lost))$('error').hidden=true;state.dirty=true;}catch(e){fail(e.message);}});new ResizeObserver(()=>state.dirty=true).observe(c);}
+document.querySelectorAll('.tools').forEach(t=>t.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=+t.dataset.view;if(b.dataset.action==='fit')fit(i);else changeZoom(i,b.dataset.action==='in'?1.25:.8);}));$('fullscreen').hidden=!document.documentElement.requestFullscreen;$('fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch(e){fail('Pełny ekran: '+e.message);}});document.addEventListener('fullscreenchange',()=>{if(quadFullscreen&&!document.fullscreenElement&&quadView)setQuadView(false);$('fullscreen').textContent=document.fullscreenElement?'Wyjdź z pełnego ekranu':'Pełny ekran';state.dirty=true;});}
+let last=performance.now();function animate(now){const dt=Math.min(.05,(now-last)/1000);last=now;const k=state.keys;if(k.has('a')){state.yaw+=dt*1.8;state.dirty=true;}if(k.has('d')){state.yaw-=dt*1.8;state.dirty=true;}const direction=(k.has('w')?1:0)-(k.has('s')?1:0);if(direction)step(direction*dt*(k.has('shift')?1.8:.65));if(state.dirty)render();requestAnimationFrame(animate);}
+try{const requested=Number(new URLSearchParams(location.search||location.hash.slice(1)).get('n'));if(Number.isInteger(requested)&&requested>=3&&requested<=24)$('sectors').value=requested;views=['cartesian','poincare','hyperboloid','pov'].map((id,i)=>initView($(id),i));for(const [id,mode] of [['cartesian-other',0],['poincare-other',1]])views.push(Object.assign(initView($(id),mode),{secondary:true}));controls();selectView(2);initWorker();booted=true;refreshAux();rebuild();requestAnimationFrame(animate);}catch(e){fail(e.message);}
+window.kaleidoscopeDiagnostics=()=>({ready:!!state.geometry,model:state.model,hyperboloidPattern:$('hyper-pattern').value,oneSheetCoordinates:{...state.one},waistRadius:1,sheets:state.geometry?.lower?[{side:1,innerRadius:state.geometry.innerRadius,variant:state.geometry.variant,circles:state.geometry.circles,leaves:state.geometry.leaves},{side:-1,innerRadius:state.geometry.lower.innerRadius,variant:state.geometry.lower.variant,circles:state.geometry.lower.circles,leaves:state.geometry.lower.leaves}]:null,packingSeed:state.geometry?.seed,surfacePosition:modelLift(state.a),busy:!state.geometry||state.geometry.id!==state.job,sectors:state.geometry?.n,depth:state.geometry?.depth,leaves:state.geometry?.leaves,circles:state.geometry?.circles,packingDepth:state.geometry?.packingDepth,effectiveDepth:state.geometry?.effectiveDepth,triangles:state.geometry?.fill.length/12,worker:!!worker,focusedView,showPreviews,cleanView,quadView,quadFullscreen,markerVisible:$('marker').checked,markerStyle:'high-contrast-hollow-chevron',sight:state.sight,meshExtent:state.geometry?.meshExtent,extent:state.extent,position:state.a.slice(),hyperboloid:lift(state.a),yaw:state.yaw,cameras:camera.map(c=>({...c})),views:views.map(v=>({mode:v.mode,width:v.canvas.width,height:v.canvas.height,rect:(()=>{const r=v.canvas.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};})(),lost:v.lost,error:v.gl.getError()}))});
+})();
+</script></body></html>
